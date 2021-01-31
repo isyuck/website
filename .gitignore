@@ -1,0 +1,30 @@
+# logs
+logs
+*.log
+npm-debug.log*
+
+# media
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.mov
+*.webm
+
+# runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+.prettierignore
+.prettierrc
+build/
+node_modules/
+.npm
+.node_repl_history
+*.tgz
+.env*
+.cache/
+public

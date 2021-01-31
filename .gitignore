@@ -23,7 +23,6 @@ node_modules/
 public/
 static/
 
-.prettierignore
 .prettierrc
 .npm
 .node_repl_history

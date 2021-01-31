@@ -7,7 +7,6 @@ module.exports = {
     fontFamily: {
       sans: ["Fakt"],
       pixel: ["Neue Pixel Grotesk"],
-      helv: ["Helvetica Neue LT 55"],
     },
   },
   variants: {

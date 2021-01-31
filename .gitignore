@@ -1,9 +1,7 @@
-# logs
 logs
 *.log
 npm-debug.log*
 
-# media
 *.png
 *.jpg
 *.jpeg
@@ -12,19 +10,22 @@ npm-debug.log*
 *.mov
 *.webm
 
-# runtime data
 pids
 *.pid
 *.seed
 *.pid.lock
 
-.prettierignore
-.prettierrc
+src/fonts/
+src/scripts/
 build/
 node_modules/
+.cache/
+public/
+static/
+
+.prettierignore
+.prettierrc
 .npm
 .node_repl_history
 *.tgz
 .env*
-.cache/
-public

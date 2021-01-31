@@ -5,6 +5,7 @@ import { MDXRenderer } from "gatsby-plugin-mdx"
 import { InView } from "react-intersection-observer"
 import { SwitchTransition, Transition } from "react-transition-group"
 import SweetScroll from "sweet-scroll"
+import Img from "gatsby-image"
 import ReactPlayer from "react-player/lazy"
 
 // TODO make active always false while scrolling back to page 0 to prevent titles popping up on their way past
@@ -42,7 +43,7 @@ const Index = ({ data, location }) => {
         className="fixed inset-0 h-screen bg-black text-white overflow-y-hidden pointer-events-auto flex flex-row"
         style={{ scrollBehavior: "smooth" }}
       >
-        <div className="fixed p-4 pt-4 z-10 h-12 text-white inset-0 text-xl">
+        <div className="fixed p-4 pt-4 z-30 h-12 text-white inset-0 text-xl">
           <div className="flex flex-row space-x-4 justify-between">
             <div className="flex flex-row flex-shrink-0">
               <a href="#page-0">
@@ -186,29 +187,55 @@ const MobilePage = ({ pageRef, pageID, post, data }) => {
           style={{ height: "110vh" }}
         >
           <>
-            <div
-              className={`relative mt-8 w-full`}
-              style={{ height: "calc(100vh - 8rem)" }}
-            >
-              <div className="flex flex-row absolute w-full h-full z-20">
-                <div className="w-1/2 h-full" onClick={() => rotL()}></div>
-                <div className="w-1/2 h-full" onClick={() => rotR()}></div>
+            {post.node.frontmatter.viddir !== null ? (
+              <div
+                className={`relative mt-8 w-full`}
+                style={{ height: "calc(100vh - 8rem)" }}
+              >
+                <div className="flex flex-row absolute w-full h-full z-20">
+                  <div className="w-1/2 h-full" onClick={() => rotL()}></div>
+                  <div className="w-1/2 h-full" onClick={() => rotR()}></div>
+                </div>
+                <Video
+                  viddir={post.node.frontmatter.viddir}
+                  current={current}
+                  state={active[0]}
+                />
+                <Video
+                  viddir={post.node.frontmatter.viddir}
+                  current={current}
+                  state={active[1]}
+                />
+                <Video
+                  viddir={post.node.frontmatter.viddir}
+                  current={current}
+                  state={active[2]}
+                />
               </div>
-              <Video current={current} state={active[0]} />
-              <Video current={current} state={active[1]} />
-              <Video current={current} state={active[2]} />
-            </div>
+            ) : (
+              <div className="mt-8">
+                <Img
+                  fluid={post.node.frontmatter.header.childImageSharp.fluid}
+                />
+              </div>
+            )}
           </>
           <p className="font-bold py-16 mx-auto w-16 text-xl text-center">↓</p>
           <div className="flex flex-col space-y-4 text-xl pb-16">
-            <p>
-              <PI>( {post.node.frontmatter.subtype} )</PI>
-            </p>
             <p>
               {post.node.frontmatter.date.split("").map(char => (
                 <PIrep char={char} rep="0">{`${char}`}</PIrep>
               ))}
             </p>
+            {post.node.frontmatter.tags !== null && (
+              <>
+                <div className="w-full text-base flex space-x-4 ">
+                  {post.node.frontmatter.tags.map(tag => (
+                    <p>{tag}</p>
+                  ))}
+                </div>
+              </>
+            )}
             <MDXRenderer>{post.node.body}</MDXRenderer>
             <a
               href={`#page-${pageID + 1}`}
@@ -223,7 +250,7 @@ const MobilePage = ({ pageRef, pageID, post, data }) => {
   )
 }
 
-const Video = ({ current, color, state }) => {
+const Video = ({ current, color, state, viddir }) => {
   let url = current
 
   switch (state) {
@@ -253,7 +280,7 @@ const Video = ({ current, color, state }) => {
           muted={true}
           loop={true}
           playsinline={true}
-          url={`vid/ge/${url + 1}.mp4`}
+          url={`vid/${viddir}/${url + 1}.mp4`}
           width="100%"
           height="100%"
           style={{
@@ -349,8 +376,15 @@ export const pageQuery = graphql`
           frontmatter {
             title
             type
-            subtype
-            gifdir
+            tags
+            viddir
+            header {
+              childImageSharp {
+                fluid(maxWidth: 800) {
+                  ...GatsbyImageSharpFluid
+                }
+              }
+            }
             date(formatString: "YYYY")
             description
             url

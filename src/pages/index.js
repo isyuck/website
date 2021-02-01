@@ -6,6 +6,7 @@ import { InView } from "react-intersection-observer"
 import { SwitchTransition, Transition } from "react-transition-group"
 import SweetScroll from "sweet-scroll"
 import Img from "gatsby-image"
+import PI from "../components/pi"
 import ReactPlayer from "react-player/lazy"
 
 // TODO make active always false while scrolling back to page 0 to prevent titles popping up on their way past
@@ -116,19 +117,24 @@ const Index = ({ data, location }) => {
                   </p>
                 </div>
                 <div className="font-sans flex flex-wrap max-w-full mt-12">
-                  <span className="pr-4">Email</span>
-                  <span className="pr-4">Blog</span>
-                  <span className="pr-4">Github</span>
-                  <span className="pr-4">Instagram</span>
+                  <span className="pr-4 underline">Email</span>
+                  <span className="pr-4 underline">Blog</span>
+                  <span className="pr-4 underline">Github</span>
+                  <span className="pr-4 underline">Instagram</span>
                 </div>
 
                 <div className="mt-12 text-sm">⚠ Flashing images</div>
-                <a href={`#page-1`} className="absolute bottom-0 py-24 pr-16">
-                  <PI>{"v"}</PI>
-                  {"ie"}
-                  <PI>{"w"}</PI>
-                  {" w"}
-                  <PI>{"o"}</PI>
+                <a
+                  href={`#page-` + `1`}
+                  className="absolute bottom-0 py-24 pr-16"
+                >
+                  {"f"}
+                  <PI>{"e"}</PI>
+                  {"at"}
+                  <PI>{"u"}</PI>
+                  {"red "}
+                  <PI>{" w"}</PI>
+                  {"o"}
                   {"r"}
                   <PI>{"k "}</PI>
                   <span className="pl-2 font-bold">→</span>
@@ -151,6 +157,36 @@ const Index = ({ data, location }) => {
               )}
             </InView>
           ))}
+          <InView
+            onChange={inview => handleViewChange(inview, null, 0)}
+            threshold="0.6" // the % of the div that has to be onscreen to be 'visible'
+          >
+            {({ inView, ref }) => (
+              <div
+                id={`page-${posts.edges.length + 1}`}
+                className={`flex h-screen flex-shrink-0 w-screen px-4 pt-16 pb-32 text-xl`}
+              >
+                <div className="m-auto text-center">
+                  <a className="p-8" href="/work-archive">
+                    {"view a"}
+                    <PI>{"r"}</PI>
+                    {"c"}
+                    <PI>{"h"}</PI>
+                    {"ive"}
+                    <PI>{"?"}</PI>
+                  </a>
+                </div>
+                <div className="absolute flex flex-row-reverse bottom-20 w-full max-w-full pr-4">
+                  <p className="pr-4">
+                    {"© 2"}
+                    <PI>{"0"}</PI>
+                    {"2"}
+                    <PI>{"1"}</PI>
+                  </p>
+                </div>
+              </div>
+            )}
+          </InView>
         </div>
       </div>
     </Layout>
@@ -177,13 +213,21 @@ const MobilePage = ({ pageRef, pageID, post, data }) => {
     console.log(current)
   }
 
+  SweetScroll.create(
+    {
+      trigger: "a[href^='#']",
+      duration: 1500,
+    },
+    pageRef.current
+  )
+
   return (
     <>
       {"work" === post.node.frontmatter.type && (
         <div
-          id={`page-${pageID}`}
+          id={`page-${pageID + 1}`}
           ref={pageRef}
-          className={`overflow-y-scroll h-screen flex-shrink-0 w-screen px-4 pt-8 pb-32 `}
+          className={`overflow-y-scroll flex-shrink-0 w-screen px-4 pt-8 pb-32 `}
           style={{ height: "110vh" }}
         >
           <>
@@ -220,7 +264,9 @@ const MobilePage = ({ pageRef, pageID, post, data }) => {
               </div>
             )}
           </>
-          <p className="font-bold py-16 mx-auto w-16 text-xl text-center">↓</p>
+          <div className="font-bold w-full py-16 mx-auto w-16 text-xl text-center">
+            ↓
+          </div>
           <div className="flex flex-col space-y-4 text-xl pb-16">
             <p>
               {post.node.frontmatter.date.split("").map(char => (
@@ -229,16 +275,17 @@ const MobilePage = ({ pageRef, pageID, post, data }) => {
             </p>
             {post.node.frontmatter.tags !== null && (
               <>
-                <div className="w-full text-base flex space-x-4 ">
+                <div className="w-full text-base flex space-x-4 underline">
                   {post.node.frontmatter.tags.map(tag => (
-                    <p>{tag}</p>
+                    <a href="work-archive">{tag}</a>
                   ))}
                 </div>
               </>
             )}
             <MDXRenderer>{post.node.body}</MDXRenderer>
             <a
-              href={`#page-${pageID + 1}`}
+              id={`${pageID}-end`}
+              href={`#page-${pageID + 2}`}
               className="font-bold py-4 mx-auto w-16 text-center"
             >
               →
@@ -292,22 +339,6 @@ const Video = ({ current, color, state, viddir }) => {
         />
       </div>
     </>
-  )
-}
-
-// pix font inline
-const PI = ({ children }) => {
-  return (
-    <span
-      style={{
-        fontSize: "1.17rem",
-        /* fontSmooth: "never", */
-        /* webkitFontSmoothing: "none", */
-      }}
-      className="font-pixel"
-    >
-      {children}
-    </span>
   )
 }
 //
@@ -364,7 +395,10 @@ export const pageQuery = graphql`
         title
       }
     }
-    allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
+    allMdx(
+      sort: { fields: [frontmatter___date], order: DESC }
+      filter: { frontmatter: { type: { eq: "work" } } }
+    ) {
       edges {
         node {
           id

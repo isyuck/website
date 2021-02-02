@@ -9,6 +9,7 @@ import SweetScroll from "sweet-scroll"
 import Img from "gatsby-image"
 import PI from "../components/pi"
 import ReactPlayer from "react-player/lazy"
+import Subpage from "../components/subpage"
 
 // TODO make active always false while scrolling back to page 0 to prevent titles popping up on their way past
 // TODO ? animation on arrow press
@@ -41,10 +42,19 @@ const Index = ({ data, location }) => {
     }
   }
 
-  const handleViewChange = (inView, post, index) => {
+  // const handleViewChange = (inView, title, index) => {
+  //   setActive(inView)
+  //   if (inView) {
+  //     setTitle(title)
+  //   } else {
+  //     setTitle("")
+  //   }
+  // }
+
+  const handleViewChange = (inView, title) => {
     setActive(inView)
-    if (inView && post != null) {
-      setTitle(post.node.frontmatter.title)
+    if (inView) {
+      setTitle(title)
     } else {
       setTitle("")
     }
@@ -65,9 +75,10 @@ const Index = ({ data, location }) => {
               unmountOnExit
               mountOnEnter
             >
-              {title.split("").map(char => {
-                return <PIrand>{`${char}`}</PIrand>
-              })}
+              {/* {title.split("").map(char => { */}
+              {/*   return <PIrand>{`${char}`}</PIrand> */}
+              {/* })} */}
+              {title}
             </FadeTransition>
           </SwitchTransition>
         </Header>
@@ -132,7 +143,7 @@ const Index = ({ data, location }) => {
                 </div>
 
                 <div className="mt-16 text-base">⚠ Flashing images</div>
-                <a href={`#page-1`} className="absolute bottom-0 py-4 pr-16">
+                <a href={`#page-1`} className="absolute bottom-0 py-20 pr-16">
                   {"f"}
                   <PI>{"e"}</PI>
                   {"at"}
@@ -147,21 +158,26 @@ const Index = ({ data, location }) => {
               </div>
             )}
           </InView>
-          {posts.edges.map((post, index) => (
-            <InView
-              onChange={inview => handleViewChange(inview, post, index)}
-              threshold="0.6" // the % of the div that has to be onscreen to be 'visible'
-            >
-              {({ inView, ref }) => (
-                <MobilePage
-                  data={data}
-                  pageRef={ref}
-                  pageID={index}
-                  post={post}
-                />
-              )}
-            </InView>
-          ))}
+
+          <Subpage title="test" index={1} handleViewChange={handleViewChange}>
+            <div>hello</div>
+          </Subpage>
+
+          {/* {posts.edges.map((post, index) => ( */}
+          {/*   <InView */}
+          {/*     onChange={inview => handleViewChange(inview, post, index)} */}
+          {/*     threshold="0.6" // the % of the div that has to be onscreen to be 'visible' */}
+          {/*   > */}
+          {/*     {({ inView, ref }) => ( */}
+          {/*       <MobilePage */}
+          {/*         data={data} */}
+          {/*         pageRef={ref} */}
+          {/*         pageID={index} */}
+          {/*         post={post} */}
+          {/*       /> */}
+          {/*     )} */}
+          {/*   </InView> */}
+          {/* ))} */}
           <InView
             onChange={inview => handleViewChange(inview, null, 0)}
             threshold="0.6" // the % of the div that has to be onscreen to be 'visible'

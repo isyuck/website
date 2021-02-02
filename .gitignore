@@ -9,6 +9,7 @@ npm-debug.log*
 *.mp4
 *.mov
 *.webm
+*.org
 
 pids
 *.pid

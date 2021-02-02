@@ -1,11 +1,11 @@
 import React, { useState } from "react"
 import PI from "../components/pi"
 import Layout from "../components/layout"
+import Header from "../components/header"
 import { graphql } from "gatsby"
 
 const WorkArchive = ({ data, location }) => {
   const posts = data.allMdx
-  const tags = data.allMdx.group
   const [tagFilter, setTagFilter] = useState(null)
 
   const handleTagChange = val => {
@@ -19,22 +19,15 @@ const WorkArchive = ({ data, location }) => {
   }
   return (
     <Layout>
-      <div className="fixed p-4 pt-4 z-30 h-12 text-white inset-0 text-xl">
-        <div className="flex flex-row space-x-4 justify-between">
-          <div className="flex flex-row flex-shrink-0">
-            <a href="/">
-              {"Is"}
-              <PI>{"aa"}</PI>
-              {"c "}
-              <PI>{"S"}</PI>
-              {"pic"}
-              <PI>{"e"}</PI>
-              {"r"}
-            </a>
-          </div>
-        </div>
-      </div>
-
+      <Header>
+        <a href="/">
+          {"Wo"}
+          <PI>{"rk"}</PI>
+          {" Arc"}
+          <PI>{"h"}</PI>
+          {"ive"}
+        </a>
+      </Header>
       <div className="w-screen h-full text-white">
         <div className="max-w-full mx-4 mt-16">
           <div className="w-full max-w-full pt-8 pb-8">
@@ -42,7 +35,7 @@ const WorkArchive = ({ data, location }) => {
               {data.allMdx.group.map(tag => (
                 <span
                   onClick={() => handleTagChange(tag.fieldValue)}
-                  className={`px-2 py-0.5 ${
+                  className={`mr-2 px-1 py-0.5 ${
                     tagFilter === tag.fieldValue ? "bg-white text-black" : ""
                   }`}
                 >

@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
+import Header from "../components/header"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import { InView } from "react-intersection-observer"
 import { SwitchTransition, Transition } from "react-transition-group"
@@ -44,33 +45,20 @@ const Index = ({ data, location }) => {
         className="fixed inset-0 h-screen bg-black text-white overflow-y-hidden pointer-events-auto flex flex-row"
         style={{ scrollBehavior: "smooth" }}
       >
-        <div className="fixed p-4 pt-4 z-30 h-12 text-white inset-0 text-xl">
-          <div className="flex flex-row space-x-4 justify-between">
-            <div className="flex flex-row flex-shrink-0">
-              <a href="#page-0">
-                {"Is"}
-                <PI>{"aa"}</PI>
-                {"c "}
-                <PI>{"S"}</PI>
-                {"pic"}
-                <PI>{"e"}</PI>
-                {"r"}
-              </a>
-            </div>
-            <SwitchTransition mode="out-in">
-              <FadeTransition
-                key={active}
-                timeout={250}
-                unmountOnExit
-                mountOnEnter
-              >
-                {title.split("").map(char => {
-                  return <PIrand>{`${char}`}</PIrand>
-                })}
-              </FadeTransition>
-            </SwitchTransition>
-          </div>
-        </div>
+        <Header>
+          <SwitchTransition mode="out-in">
+            <FadeTransition
+              key={active}
+              timeout={250}
+              unmountOnExit
+              mountOnEnter
+            >
+              {title.split("").map(char => {
+                return <PIrand>{`${char}`}</PIrand>
+              })}
+            </FadeTransition>
+          </SwitchTransition>
+        </Header>
 
         {/* <a */}
         {/*   href={`#page-${currentPage + 1}`} */}
@@ -116,18 +104,15 @@ const Index = ({ data, location }) => {
                     <PI>{".K."}</PI>
                   </p>
                 </div>
-                <div className="font-sans flex flex-wrap max-w-full mt-12">
+                <div className="font-sans text-base flex flex-wrap max-w-full mt-12">
                   <span className="pr-4 underline">Email</span>
                   <span className="pr-4 underline">Blog</span>
                   <span className="pr-4 underline">Github</span>
                   <span className="pr-4 underline">Instagram</span>
                 </div>
 
-                <div className="mt-12 text-sm">⚠ Flashing images</div>
-                <a
-                  href={`#page-` + `1`}
-                  className="absolute bottom-0 py-24 pr-16"
-                >
+                <div className="mt-12 text-base">⚠ Flashing images</div>
+                <a href={`#page-1`} className="absolute bottom-0 py-24 pr-16">
                   {"f"}
                   <PI>{"e"}</PI>
                   {"at"}
@@ -267,7 +252,7 @@ const MobilePage = ({ pageRef, pageID, post, data }) => {
           <div className="font-bold w-full py-16 mx-auto w-16 text-xl text-center">
             ↓
           </div>
-          <div className="flex flex-col space-y-4 text-xl pb-16">
+          <div className="flex flex-col space-y-4 text-lg pb-16">
             <p>
               {post.node.frontmatter.date.split("").map(char => (
                 <PIrep char={char} rep="0">{`${char}`}</PIrep>
@@ -286,7 +271,7 @@ const MobilePage = ({ pageRef, pageID, post, data }) => {
             <a
               id={`${pageID}-end`}
               href={`#page-${pageID + 2}`}
-              className="font-bold py-4 mx-auto w-16 text-center"
+              className="font-bold text-xl py-4 mx-auto w-16 text-center"
             >
               →
             </a>

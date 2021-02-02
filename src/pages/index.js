@@ -29,6 +29,18 @@ const Index = ({ data, location }) => {
     ref.current
   )
 
+  const [tagFilter, setTagFilter] = useState(null)
+
+  const handleTagChange = val => {
+    if (tagFilter === null) {
+      setTagFilter(val)
+    } else if (tagFilter === val) {
+      setTagFilter(null)
+    } else {
+      setTagFilter(val)
+    }
+  }
+
   const handleViewChange = (inView, post, index) => {
     setActive(inView)
     if (inView && post != null) {
@@ -105,14 +117,22 @@ const Index = ({ data, location }) => {
                   </p>
                 </div>
                 <div className="font-sans text-base flex flex-wrap max-w-full mt-12">
-                  <span className="pr-4 underline">Email</span>
+                  <a
+                    href={`#page-${posts.edges.length + 2}`}
+                    className="pr-4 underline"
+                  >
+                    Archive
+                  </a>
                   <span className="pr-4 underline">Blog</span>
+                </div>
+                <div className="font-sans text-base flex flex-wrap max-w-full mt-4">
+                  <span className="pr-4 underline">Email</span>
                   <span className="pr-4 underline">Github</span>
                   <span className="pr-4 underline">Instagram</span>
                 </div>
 
-                <div className="mt-12 text-base">⚠ Flashing images</div>
-                <a href={`#page-1`} className="absolute bottom-0 py-24 pr-16">
+                <div className="mt-16 text-base">⚠ Flashing images</div>
+                <a href={`#page-1`} className="absolute bottom-0 py-4 pr-16">
                   {"f"}
                   <PI>{"e"}</PI>
                   {"at"}
@@ -152,22 +172,68 @@ const Index = ({ data, location }) => {
                 className={`flex h-screen flex-shrink-0 w-screen px-4 pt-16 pb-32 text-xl`}
               >
                 <div className="m-auto text-center">
-                  <a className="p-8" href="/work-archive">
-                    {"view a"}
+                  <a className="p-8" href={`#page-${posts.edges.length + 2}`}>
+                    {"A"}
                     <PI>{"r"}</PI>
                     {"c"}
                     <PI>{"h"}</PI>
                     {"ive"}
-                    <PI>{"?"}</PI>
+                    {" →"}
                   </a>
                 </div>
                 <div className="absolute flex flex-row-reverse bottom-20 w-full max-w-full pr-4">
-                  <p className="pr-4">
-                    {"© 2"}
-                    <PI>{"0"}</PI>
-                    {"2"}
-                    <PI>{"1"}</PI>
-                  </p>
+                  {/* <p className="pr-4"> */}
+                  {/*   {"© 2"} */}
+                  {/*   <PI>{"0"}</PI> */}
+                  {/*   {"2"} */}
+                  {/*   <PI>{"1"}</PI> */}
+                  {/* </p> */}
+                </div>
+              </div>
+            )}
+          </InView>
+          <InView
+            onChange={inview => handleViewChange(inview, null, 0)}
+            threshold="0.6" // the % of the div that has to be onscreen to be 'visible'
+          >
+            {({ inView, ref }) => (
+              <div
+                id={`page-${posts.edges.length + 2}`}
+                className={`flex h-screen flex-shrink-0 w-screen px-4 pt-16 pb-32 text-xl`}
+              >
+                <div className="max-w-full">
+                  <div className="w-full max-w-full pt-8 pb-8">
+                    <div className="flex flex-wrap">
+                      {data.allMdx.group.map(tag => (
+                        <span
+                          onClick={() => handleTagChange(tag.fieldValue)}
+                          className={`mr-2 px-1 py-0.5 ${
+                            tagFilter === tag.fieldValue
+                              ? "bg-white text-black"
+                              : ""
+                          }`}
+                        >
+                          <span className="underline">{tag.fieldValue}</span>
+                          <PI> ( {tag.totalCount} )</PI>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  {posts.edges.map(post => (
+                    <>
+                      {post.node.frontmatter.tags !== null && (
+                        <>
+                          <PostLink
+                            title={post.node.frontmatter.title}
+                            slug={post.node.fields.slug}
+                            date={post.node.frontmatter.date}
+                            tags={post.node.frontmatter.tags}
+                            tagFilter={tagFilter}
+                          />
+                        </>
+                      )}
+                    </>
+                  ))}
                 </div>
               </div>
             )}
@@ -183,6 +249,14 @@ const MobilePage = ({ pageRef, pageID, post, data }) => {
   const vidCount = 32 // try and obtain this number programmatically
   const [current, setCurrent] = useState(1)
   const [active] = useState([0, 1, 2]) // 0 prev, 1 current, 2 next
+  const [showCopyLink, setShowCopyLink] = useState(false)
+
+  const copyLink = () => {
+    setShowCopyLink(true)
+    setTimeout(() => {
+      setShowCopyLink(false)
+    }, 100)
+  }
 
   // rotate videos right
   const rotR = () => {
@@ -208,75 +282,92 @@ const MobilePage = ({ pageRef, pageID, post, data }) => {
 
   return (
     <>
-      {"work" === post.node.frontmatter.type && (
-        <div
-          id={`page-${pageID + 1}`}
-          ref={pageRef}
-          className={`overflow-y-scroll flex-shrink-0 w-screen px-4 pt-16 pb-32 `}
-        >
-          <>
-            {post.node.frontmatter.viddir !== null ? (
-              <div
-                className={`relative mt-8 w-full`}
-                style={{ height: "calc(100vw - 2rem)" }}
-              >
-                <div className="flex flex-row absolute h-full w-full z-20">
-                  <div className="w-1/2 h-full" onClick={() => rotL()}></div>
-                  <div className="w-1/2 h-full" onClick={() => rotR()}></div>
-                </div>
-                <Video
-                  viddir={post.node.frontmatter.viddir}
-                  current={current}
-                  state={active[0]}
-                />
-                <Video
-                  viddir={post.node.frontmatter.viddir}
-                  current={current}
-                  state={active[1]}
-                />
-                <Video
-                  viddir={post.node.frontmatter.viddir}
-                  current={current}
-                  state={active[2]}
-                />
-              </div>
-            ) : (
-              <div className="mt-8">
-                <Img
-                  fluid={post.node.frontmatter.header.childImageSharp.fluid}
-                />
-              </div>
-            )}
-          </>
-          <div className="font-bold w-full pt-12 pb-16 mx-auto w-16 text-xl text-center">
-            ↓
-          </div>
-          <div className="flex flex-col space-y-4 text-lg pb-16">
-            <p>
-              {post.node.frontmatter.date.split("").map(char => (
-                <PIrep char={char} rep="0">{`${char}`}</PIrep>
-              ))}
-            </p>
-            {post.node.frontmatter.tags !== null && (
-              <>
-                <div className="w-full text-base flex space-x-4 underline">
-                  {post.node.frontmatter.tags.map(tag => (
-                    <a href="work-archive">{tag}</a>
-                  ))}
-                </div>
-              </>
-            )}
-            <MDXRenderer>{post.node.body}</MDXRenderer>
-            <a
-              id={`${pageID}-end`}
-              href={`#page-${pageID + 2}`}
-              className="font-bold text-xl pt-4 pb-16 mx-auto w-16 text-center"
+      <div
+        id={`page-${pageID + 1}`}
+        ref={pageRef}
+        className={`overflow-y-scroll flex-shrink-0 w-screen px-4 pt-16 pb-32 `}
+      >
+        <>
+          {post.node.frontmatter.viddir !== null ? (
+            <div
+              className={`relative mt-8 w-full`}
+              style={{ height: "calc(100vw - 2rem)" }}
             >
-              →
-            </a>
-          </div>
+              <div className="flex flex-row absolute h-full w-full z-20">
+                <div className="w-1/2 h-full" onClick={() => rotL()}></div>
+                <div className="w-1/2 h-full" onClick={() => rotR()}></div>
+              </div>
+              <Video
+                viddir={post.node.frontmatter.viddir}
+                current={current}
+                state={active[0]}
+              />
+              <Video
+                viddir={post.node.frontmatter.viddir}
+                current={current}
+                state={active[1]}
+              />
+              <Video
+                viddir={post.node.frontmatter.viddir}
+                current={current}
+                state={active[2]}
+              />
+            </div>
+          ) : (
+            <div className="mt-8">
+              <Img fluid={post.node.frontmatter.header.childImageSharp.fluid} />
+            </div>
+          )}
+        </>
+        <div className="font-bold w-full pt-32 pb-16 mx-auto w-16 text-xl text-center">
+          ↓
         </div>
-      )}
+        <div className="flex flex-col space-y-4 text-lg pb-16">
+          <p>
+            {post.node.frontmatter.date.split("").map(char => (
+              <PIrep char={char} rep="0">{`${char}`}</PIrep>
+            ))}
+          </p>
+          <div className="flex flex-row" onClick={() => copyLink()}>
+            <p
+              className={`transform origin-center text-center left-0 max-w-min duration-500 ${
+                showCopyLink ? "scale-125" : "scale-100"
+              }`}
+            >
+              {"🔗"}
+            </p>
+            <p
+              className={`transition-opacity pl-4 text-base ${
+                showCopyLink
+                  ? "invisible duration-0 opacity-100"
+                  : "visible delay-500 opacity-0 duration-1000"
+              }
+`}
+              style={{ WebkitTapHighlightColor: "transparent" }}
+            >
+              Link copied!
+            </p>
+          </div>
+
+          {post.node.frontmatter.tags !== null && (
+            <>
+              <div className="w-full text-base flex space-x-4 underline">
+                {post.node.frontmatter.tags.map(tag => (
+                  <a href="#page-5">{tag}</a>
+                ))}
+              </div>
+            </>
+          )}
+          <MDXRenderer>{post.node.body}</MDXRenderer>
+          <a
+            id={`${pageID}-end`}
+            href={`#page-${pageID + 2}`}
+            className="font-bold text-xl pt-4 pb-16 mx-auto w-16 text-center"
+          >
+            →
+          </a>
+        </div>
+      </div>
     </>
   )
 }
@@ -317,7 +408,27 @@ const Video = ({ current, color, state, viddir }) => {
     </>
   )
 }
-//
+
+const PostLink = ({ title, slug, date, tags, tagFilter }) => {
+  if (tags.includes(tagFilter)) {
+    return (
+      <a href="/" className="flex flex-cols-2 py-1 text-xl">
+        <span className="flex-shrink pr-8">{date}</span>
+        <a href={slug}>{title}</a>
+      </a>
+    )
+  } else if (tagFilter === null) {
+    return (
+      <a href="/" className="flex flex-cols-2 py-1 text-xl">
+        <span className="flex-shrink pr-8">{date}</span>
+        <a href={slug}>{title}</a>
+      </a>
+    )
+  } else {
+    return null
+  }
+}
+
 // replace char with rep styled as inline pixel font
 const PIrep = ({ children, char, rep }) => {
   if (char !== rep) {
@@ -373,8 +484,12 @@ export const pageQuery = graphql`
     }
     allMdx(
       sort: { fields: [frontmatter___date], order: DESC }
-      filter: { frontmatter: { type: { eq: "work" } } }
+      filter: { frontmatter: { template: { eq: "work-page" } } }
     ) {
+      group(field: frontmatter___tags) {
+        fieldValue
+        totalCount
+      }
       edges {
         node {
           id
@@ -385,7 +500,7 @@ export const pageQuery = graphql`
           }
           frontmatter {
             title
-            type
+            template
             tags
             viddir
             header {

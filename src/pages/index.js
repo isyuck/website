@@ -45,7 +45,7 @@ const Index = ({ data, location }) => {
         className="fixed inset-0 h-screen bg-black text-white overflow-y-hidden pointer-events-auto flex flex-row"
         style={{ scrollBehavior: "smooth" }}
       >
-        <Header>
+        <Header link="#page-0">
           <SwitchTransition mode="out-in">
             <FadeTransition
               key={active}
@@ -212,16 +212,15 @@ const MobilePage = ({ pageRef, pageID, post, data }) => {
         <div
           id={`page-${pageID + 1}`}
           ref={pageRef}
-          className={`overflow-y-scroll flex-shrink-0 w-screen px-4 pt-8 pb-32 `}
-          style={{ height: "110vh" }}
+          className={`overflow-y-scroll flex-shrink-0 w-screen px-4 pt-16 pb-32 `}
         >
           <>
             {post.node.frontmatter.viddir !== null ? (
               <div
                 className={`relative mt-8 w-full`}
-                style={{ height: "calc(100vh - 8rem)" }}
+                style={{ height: "calc(100vw - 2rem)" }}
               >
-                <div className="flex flex-row absolute w-full h-full z-20">
+                <div className="flex flex-row absolute h-full w-full z-20">
                   <div className="w-1/2 h-full" onClick={() => rotL()}></div>
                   <div className="w-1/2 h-full" onClick={() => rotR()}></div>
                 </div>
@@ -249,7 +248,7 @@ const MobilePage = ({ pageRef, pageID, post, data }) => {
               </div>
             )}
           </>
-          <div className="font-bold w-full py-16 mx-auto w-16 text-xl text-center">
+          <div className="font-bold w-full pt-12 pb-16 mx-auto w-16 text-xl text-center">
             ↓
           </div>
           <div className="flex flex-col space-y-4 text-lg pb-16">
@@ -271,7 +270,7 @@ const MobilePage = ({ pageRef, pageID, post, data }) => {
             <a
               id={`${pageID}-end`}
               href={`#page-${pageID + 2}`}
-              className="font-bold text-xl py-4 mx-auto w-16 text-center"
+              className="font-bold text-xl pt-4 pb-16 mx-auto w-16 text-center"
             >
               →
             </a>
@@ -301,10 +300,9 @@ const Video = ({ current, color, state, viddir }) => {
   return (
     <>
       <div
-        className={`absolute w-full ${
+        className={`absolute w-full h-full ${
           state === 1 ? "opacity-100" : "opacity-0"
         }`}
-        style={{ height: "calc(100vh - 8rem)" }}
       >
         <ReactPlayer
           playing={true}
@@ -314,13 +312,6 @@ const Video = ({ current, color, state, viddir }) => {
           playsinline={true}
           url={`vid/${viddir}/${url + 1}.mp4`}
           width="100%"
-          height="100%"
-          style={{
-            top: "0",
-            left: "0",
-            position: "absolute",
-            width: "100%",
-          }}
         />
       </div>
     </>

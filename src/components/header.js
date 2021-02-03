@@ -3,21 +3,22 @@ import PI from "../components/pi"
 
 const Header = ({ link, children }) => {
   return (
-    <div className="fixed p-4 pt-4 z-30 h-12 text-white inset-0 text-xl">
-      <div className="flex flex-row space-x-4 justify-between">
-        <div className="flex flex-row flex-shrink-0">
-          <a href={link}>
-            {"I"}
-            <PI>{"s"}</PI>
-            {"aac "}
-            <PI>{"S"}</PI>
-            {"pice"}
-            <PI>{"r"}</PI>
-          </a>
-        </div>
-        {children}
+    <a
+      href={link}
+      className="fixed m-2 z-30 h-9 text-white inset-0 text-xl flex flex-row bg-black space-x-4 justify-between"
+    >
+      <div className="flex flex-row flex-shrink-0 px-2 py-1">
+        <span>
+          {"I"}
+          <PI>{"s"}</PI>
+          {"aac "}
+          <PI>{"S"}</PI>
+          {"pice"}
+          <PI>{"r"}</PI>
+        </span>
       </div>
-    </div>
+      <span className="px-2 py-1">{children}</span>
+    </a>
   )
 }
 

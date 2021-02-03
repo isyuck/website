@@ -3,19 +3,33 @@ import { InView } from "react-intersection-observer"
 import Img from "gatsby-image"
 import ReactPlayer from "react-player/lazy"
 
-const Subpage = ({ children, index, title, handleViewChange }) => {
+const Subpage = ({
+  children,
+  index = -1,
+  title,
+  nextArrow = true,
+  onChange,
+}) => {
+  const idPrefix = "subpage-"
+
   return (
-    <InView
-      onChange={inview => handleViewChange(inview, title, index)}
-      threshold="0.6"
-    >
+    <InView onChange={inview => onChange(inview, title)} threshold="0.6">
       {({ inView, ref }) => (
         <div
-          id={`page-${index}`}
+          id={idPrefix + index}
           ref={ref}
-          className={`flex h-screen flex-shrink-0 w-screen px-4 pt-16 pb-32 text-xl`}
+          className={`relative flex flex-col flex-shrink-0 w-screen max-w-screen px-4 pt-16 text-xl overflow-y-scroll`}
         >
           {children}
+
+          {nextArrow && (
+            <a
+              href={`#${idPrefix + (index + 1)}`}
+              className="sticky bottom-0 mx-auto inset-x-0 font-bold text-xl p-8 w-32 text-center z-30"
+            >
+              →
+            </a>
+          )}
         </div>
       )}
     </InView>

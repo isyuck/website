@@ -9,6 +9,7 @@ const Subpage = ({
   title,
   nextArrow = true,
   onChange,
+  px = 4,
 }) => {
   const idPrefix = "subpage-"
 
@@ -18,7 +19,7 @@ const Subpage = ({
         <div
           id={idPrefix + index}
           ref={ref}
-          className={`relative flex flex-col flex-shrink-0 w-screen max-w-screen px-4 pt-16 text-xl overflow-y-scroll`}
+          className={`flex flex-col flex-shrink-0 w-screen max-w-screen px-${px} pt-16 text-xl overflow-y-scroll`}
         >
           {children}
 

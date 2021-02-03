@@ -139,8 +139,23 @@ const Index = ({ data, location }) => {
             </div>
           </Subpage>
 
-          <Subpage title="test" index={1} onChange={handleViewChange}>
-            <div>hello</div>
+          <Subpage title="Work" index={1} onChange={handleViewChange} px={0}>
+            {posts.edges.map(post => (
+              <>
+                {post.node.frontmatter.header !== null && (
+                  <>
+                    <div className="grid grid-cols-1 mt-8">
+                      <WorkTile post={post} />
+                      <WorkTile post={post} />
+                      <WorkTile post={post} />
+                      <WorkTile post={post} />
+                      <WorkTile post={post} />
+                      <WorkTile post={post} />
+                    </div>
+                  </>
+                )}
+              </>
+            ))}
           </Subpage>
 
           <Subpage title="test2" index={2} onChange={handleViewChange}>
@@ -209,6 +224,55 @@ const Index = ({ data, location }) => {
   )
 }
 export default Index
+
+const WorkTile = ({ post }) => {
+  const [active, setActive] = useState(true)
+  const dt = 500
+  return (
+    <>
+      <div className={`sticky block p-2 -top-4 left-0 z-20 -mt-24`}>
+        <span className="float-left clear-left px-2 py-1 bg-black">
+          {post.node.frontmatter.title}
+        </span>
+        <span className="float-left clear-left px-2 py-1 mt-3 bg-black">
+          {post.node.frontmatter.date}
+        </span>
+      </div>
+      <div style={{ marginTop: "-6.5rem" }}>
+        <Img fluid={post.node.frontmatter.header.childImageSharp.fluid} />
+      </div>
+    </>
+
+    // <div
+    //   className="relative"
+    //   /* onTouchStart={() => setActive(true)} */
+    //   /* onTouchMove={() => setActive(true)} */
+    //   /* onTouchEnd={() => setTimeout(() => setActive(false), 500)} */
+    // >
+    //   <div className="absolute h-32">
+    //     <div
+    //       className={`sticky bg-red-500 block p-2 inset-y-0 z-20
+    //       transition-opacity duration-700
+    //        ${active ? "opacity-100" : `delay-${dt} opacity-0`} `}
+    //     >
+    //       <span className="float-left clear-left px-2 py-1 bg-black">
+    //         {post.node.frontmatter.title}
+    //       </span>
+    //       <span className="float-left clear-left px-2 py-1 mt-2 bg-black">
+    //         {post.node.frontmatter.date}
+    //       </span>
+    //     </div>
+    //   </div>
+    //   <div
+    //     className={`relative inset-0 transition-opacity duration-700 ${
+    //       active ? "opacity-60" : `delay-${dt} opacity-100`
+    //     }`}
+    //   >
+    //     <Img fluid={post.node.frontmatter.header.childImageSharp.fluid} />
+    //   </div>
+    // </div>
+  )
+}
 
 const MobilePage = ({ pageID, post, data }) => {
   const vidCount = 32 // try and obtain this number programmatically

@@ -2,6 +2,13 @@
 @tailwind components;
 
 @font-face {
+  font-family: "Akkurat";
+  font-weight: bold;
+  font-style: normal;
+  src: url("../fonts/akkurat-mono.woff");
+}
+
+@font-face {
   font-family: "Fakt";
   font-weight: normal;
   font-style: normal;
@@ -46,14 +53,26 @@
 
 body,
 html {
-  overflow: hidden;
-  position: fixed;
+  /* overflow: hidden; */
+  /* position: fixed; */
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background-color: #000;
-  scroll-behavior: smooth;
   /* font-smooth: never; */
   /* -webkit-font-smoothing: none; */
+}
+pre {
+  overflow: auto;
+  word-wrap: normal;
+  white-space: pre;
+  font-size: 1.1rem;
+}
+
+code {
+  font-size: 1.1rem;
+  text-shadow: none;
+  font-family: "Akkurat", monospace;
+  line-height: 1.5;
 }

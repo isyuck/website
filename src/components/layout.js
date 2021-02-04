@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet"
 
 const Layout = ({ location, title, children }) => {
   // const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" })
-  useLockBodyScroll() // for ios
+  // useLockBodyScroll() // for ios
 
   return (
     <>

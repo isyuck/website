@@ -26,7 +26,7 @@ const Subpage = ({
           {nextArrow && (
             <a
               href={`#${idPrefix + (index + 1)}`}
-              className="sticky bottom-0 mx-auto inset-x-0 font-bold text-xl p-8 w-32 text-center z-30"
+              className="sticky -bottom-4 mx-auto inset-x-0 font-bold text-xl p-8 w-32 text-center z-30"
             >
               →
             </a>

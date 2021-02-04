@@ -87,7 +87,7 @@ const Index = ({ data, location }) => {
               <>
                 {post.node.frontmatter.cover !== null && (
                   <>
-                    <div className="grid grid-cols-1 mt-8">
+                    <div className="grid grid-cols-1 mt-6">
                       <WorkTile post={post} />
                     </div>
                   </>
@@ -121,7 +121,7 @@ const WorkTile = ({ post }) => {
   return (
     <>
       <div
-        className={`sticky block p-2 -top-5 left-0 z-20 -mt-24 pointer-events-none`}
+        className={`sticky block p-2 -top-5 left-0 z-20 -mt-6 mb-1 pointer-events-none`}
       >
         <span className="float-left clear-left px-2 py-1 bg-black">
           {post.node.frontmatter.title}

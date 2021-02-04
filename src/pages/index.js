@@ -82,15 +82,10 @@ const Index = ({ data, location }) => {
             </div>
           </Subpage>
 
-          <Subpage
-            title="Projects"
-            index={1}
-            onChange={handleViewChange}
-            px={0}
-          >
+          <Subpage title="Work" index={1} onChange={handleViewChange} px={0}>
             {posts.edges.map(post => (
               <>
-                {post.node.frontmatter.header !== null && (
+                {post.node.frontmatter.cover !== null && (
                   <>
                     <div className="grid grid-cols-1 mt-8">
                       <WorkTile post={post} />
@@ -101,7 +96,12 @@ const Index = ({ data, location }) => {
             ))}
           </Subpage>
 
-          <Subpage title="Blog" index={2} onChange={handleViewChange}>
+          <Subpage
+            title="Blog"
+            index={2}
+            onChange={handleViewChange}
+            nextArrow={false}
+          >
             {posts.edges.map(post => (
               <a className="py-2" href={post.node.fields.slug}>
                 {post.node.frontmatter.title}
@@ -120,17 +120,31 @@ const WorkTile = ({ post }) => {
   const dt = 500
   return (
     <>
-      <div className={`sticky block p-2 -top-4 left-0 z-20 -mt-24`}>
+      <div
+        className={`sticky block p-2 -top-5 left-0 z-20 -mt-24 pointer-events-none`}
+      >
         <span className="float-left clear-left px-2 py-1 bg-black">
           {post.node.frontmatter.title}
         </span>
-        <span className="float-left clear-left px-2 py-1 mt-3 bg-black">
+        <span className="float-left clear-left px-2 py-1 mt-2 bg-black">
           {post.node.frontmatter.date}
         </span>
       </div>
-      <div style={{ marginTop: "-6.5rem" }}>
-        <Img fluid={post.node.frontmatter.header.childImageSharp.fluid} />
-      </div>
+      <a
+        href={post.node.fields.slug}
+        onTouchStart={() => setActive(true)}
+        onTouchMove={() => setActive(true)}
+        onTouchEnd={() => setTimeout(() => setActive(false), 500)}
+        onMouseEnter={() => setActive(true)}
+        onMouseLeave={() => setTimeout(() => setActive(false), 500)}
+        className={`transition-all duration-700`}
+        style={{
+          marginTop: "-6.5rem",
+          filter: active ? "brightness(100%)" : "brightness(75%)",
+        }}
+      >
+        <Img fluid={post.node.frontmatter.cover.childImageSharp.fluid} />
+      </a>
     </>
   )
 }
@@ -165,7 +179,7 @@ export const pageQuery = graphql`
           }
           frontmatter {
             title
-            header {
+            cover {
               childImageSharp {
                 fluid(maxWidth: 800) {
                   ...GatsbyImageSharpFluid

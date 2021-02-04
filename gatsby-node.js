@@ -6,19 +6,19 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
   // Define a template for blog post
   const blogPage = path.resolve(`./src/templates/blog-page.js`)
+  const workPage = path.resolve("./src/templates/work-page.js")
 
   // Get all markdown blog posts sorted by date
-  const result = await graphql(
+  const blogQ = await graphql(
     `
-      {
-        allMdx(
-          sort: { fields: [frontmatter___date], order: ASC }
-          limit: 1000
-        ) {
-          nodes {
-            id
-            fields {
-              slug
+      query {
+        allMdx(filter: { fileAbsolutePath: { regex: "/blog/" } }) {
+          edges {
+            node {
+              id
+              fields {
+                slug
+              }
             }
           }
         }
@@ -26,41 +26,42 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     `
   )
 
-  if (result.errors) {
-    reporter.panicOnBuild(
-      `There was an error loading your blog posts`,
-      result.errors
-    )
-    return
-  }
+  const workQ = await graphql(
+    `
+      query {
+        allMdx(filter: { fileAbsolutePath: { regex: "/work/" } }) {
+          edges {
+            node {
+              id
+              fields {
+                slug
+              }
+            }
+          }
+        }
+      }
+    `
+  )
 
-  const posts = result.data.allMdx.nodes
-
-  // Create blog posts pages
-  // But only if there's at least one markdown file found at "content/blog" (defined in gatsby-config.js)
-  // `context` is available in the template as a prop and as a variable in GraphQL
-
-  if (posts.length > 0) {
-    posts.forEach((post, index) => {
-      const previousPostId = index === 0 ? null : posts[index - 1].id
-      const nextPostId = index === posts.length - 1 ? null : posts[index + 1].id
-
-      createPage({
-        path: post.fields.slug,
-        component: blogPage,
-        context: {
-          id: post.id,
-          previousPostId,
-          nextPostId,
-        },
-      })
+  blogQ.data.allMdx.edges.forEach(({ node }) => {
+    createPage({
+      path: node.fields.slug,
+      component: blogPage,
+      context: { id: node.id },
     })
-  }
+  })
+
+  workQ.data.allMdx.edges.forEach(({ node }) => {
+    createPage({
+      path: node.fields.slug,
+      component: workPage,
+      context: { id: node.id },
+    })
+  })
 }
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions
-
   if (node.internal.type === `Mdx`) {
     const value = createFilePath({ node, getNode })
 

@@ -10,6 +10,7 @@ const Subpage = ({
   nextArrow = true,
   onChange,
   px = 4,
+  pt = 16,
 }) => {
   const idPrefix = "subpage-"
 
@@ -19,14 +20,14 @@ const Subpage = ({
         <div
           id={idPrefix + index}
           ref={ref}
-          className={`flex flex-col flex-shrink-0 w-screen max-w-screen px-${px} pt-16 text-xl overflow-y-scroll`}
+          className={`flex flex-col flex-shrink-0 w-screen max-w-screen px-${px} pt-${pt} text-xl overflow-y-scroll`}
         >
           {children}
 
           {nextArrow && (
             <a
               href={`#${idPrefix + (index + 1)}`}
-              className="sticky -bottom-4 mx-auto inset-x-0 font-bold text-xl p-8 w-32 text-center z-30"
+              className="sticky mx-auto bottom-0 inset-x-0 font-bold text-xl p-3 w-32 text-center z-30"
             >
               →
             </a>

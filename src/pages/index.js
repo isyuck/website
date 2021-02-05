@@ -37,7 +37,7 @@ const Index = ({ data, location }) => {
     <Layout>
       <div
         ref={ref}
-        className="fixed inset-0 bg-black text-white overflow-y-hidden flex flex-row"
+        className="fixed inset-0 bg-white text-black overflow-y-hidden flex flex-row"
       >
         <Header link="#subpage-0">
           <SwitchTransition mode="out-in">
@@ -92,6 +92,7 @@ const Index = ({ data, location }) => {
             index={1}
             onChange={handleViewChange}
             px={0}
+            pt={0}
           >
             {posts.edges.map(post => (
               <>
@@ -111,10 +112,11 @@ const Index = ({ data, location }) => {
             index={2}
             onChange={handleViewChange}
             nextArrow={false}
+            px={2}
           >
             <div className="flex flex-col space-y-16">
               {posts.edges.map(post => (
-                <div className="border-l-2 pl-4 flex flex-col flex-shrink-0 space-y-4">
+                <div className="border-l-2 border-black pl-2 py-2 flex flex-col flex-shrink-0 space-y-4">
                   <a href={post.node.fields.slug}>
                     {post.node.frontmatter.title}
                   </a>
@@ -151,7 +153,7 @@ const WorkTile = ({ post, root }) => {
   return (
     <>
       <div
-        className={`sticky block p-2 -top-5 left-0 z-20 -mt-6 mb-1 pointer-events-none`}
+        className={`sticky block p-2 top-11 left-0 z-20 -mt-6 mb-1 text-white pointer-events-none`}
       >
         <span className="float-left clear-left px-2 py-1 bg-black">
           {post.node.frontmatter.title}

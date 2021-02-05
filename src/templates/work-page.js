@@ -25,10 +25,8 @@ const WorkPage = ({ data, location }) => {
   const mdx = data.mdx
   return (
     <Layout>
-      <Header my={0} link="/#">
-        {mdx.frontmatter.title}
-      </Header>
-      <div className="absolute flex flex-col w-screen max-w-screen space-y-8 text-white mt-11 px-4 text-lg overflow-y-auto overflow-x-hidden pb-64">
+      <Header link="/#">{mdx.frontmatter.title}</Header>
+      <div className="absolute flex flex-col w-screen max-w-screen space-y-8 text-black mt-11 px-4 text-lg overflow-y-auto overflow-x-hidden pb-64">
         <div className="mb-4">
           <div className="flex flex-row justify-between">
             <p

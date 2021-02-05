@@ -3,6 +3,7 @@ import { Link, graphql } from "gatsby"
 import Header from "../components/header"
 import Layout from "../components/layout"
 import { MDXRenderer } from "gatsby-plugin-mdx"
+import { MDXProvider } from "@mdx-js/react"
 
 const BlogPost = ({ data, location }) => {
   const [linkActive, setLinkActive] = useState(false)
@@ -26,10 +27,8 @@ const BlogPost = ({ data, location }) => {
 
   return (
     <Layout>
-      <Header my={0} link="/">
-        {mdx.frontmatter.title}
-      </Header>
-      <div className="absolute flex flex-col w-screen max-w-screen space-y-8 text-white mt-11 px-4 text-lg overflow-y-auto overflow-x-hidden pb-64">
+      <Header link="/">{mdx.frontmatter.title}</Header>
+      <div className="absolute flex flex-col w-screen max-w-screen space-y-8 text-black mt-11 px-2 text-lg overflow-y-auto overflow-x-hidden pb-64">
         <div className="mb-4">
           <div className="flex flex-row justify-between">
             <p
@@ -66,6 +65,7 @@ const BlogPost = ({ data, location }) => {
             <MDXRenderer>{mdx.body}</MDXRenderer>
           </div>
         </article>
+
         <div className="flex flex-row justify-between pt-16">
           (previous && (
           <a href={previous.fields.slug} className="py-3 flex-grow">

@@ -13,29 +13,32 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     `
       query {
         allMdx(filter: { fileAbsolutePath: { regex: "/blog/" } }) {
-          edges {
-            node {
-              id
-              fields {
-                slug
-              }
+          nodes {
+            id
+            fields {
+              slug
             }
           }
         }
       }
     `
   )
+  if (blogQ.errors) {
+    reporter.panicOnBuild(
+      `There was an error loading your blog posts`,
+      result.errors
+    )
+    return
+  }
 
   const workQ = await graphql(
     `
       query {
         allMdx(filter: { fileAbsolutePath: { regex: "/work/" } }) {
-          edges {
-            node {
-              id
-              fields {
-                slug
-              }
+          nodes {
+            id
+            fields {
+              slug
             }
           }
         }
@@ -43,21 +46,40 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     `
   )
 
-  blogQ.data.allMdx.edges.forEach(({ node }) => {
-    createPage({
-      path: node.fields.slug,
-      component: blogPage,
-      context: { id: node.id },
-    })
-  })
+  if (workQ.errors) {
+    reporter.panicOnBuild(
+      `There was an error loading your work posts`,
+      result.errors
+    )
+    return
+  }
 
-  workQ.data.allMdx.edges.forEach(({ node }) => {
-    createPage({
-      path: node.fields.slug,
-      component: workPage,
-      context: { id: node.id },
+  const bq = blogQ.data.allMdx.nodes
+  const wq = workQ.data.allMdx.nodes
+
+  if (bq.length > 0) {
+    bq.forEach((node, index) => {
+      const prevID = index === 0 ? null : bq[index - 1].id
+      const nextID = index === bq.length - 1 ? null : bq[index + 1].id
+      createPage({
+        path: node.fields.slug,
+        component: blogPage,
+        context: { id: node.id, prevID, nextID },
+      })
     })
-  })
+  }
+
+  if (wq.length > 0) {
+    wq.forEach((node, index) => {
+      const prevID = index === 0 ? null : wq[index - 1].id
+      const nextID = index === wq.length - 1 ? null : wq[index + 1].id
+      createPage({
+        path: node.fields.slug,
+        component: workPage,
+        context: { id: node.id, prevID, nextID },
+      })
+    })
+  }
 }
 
 exports.onCreateNode = ({ node, actions, getNode }) => {

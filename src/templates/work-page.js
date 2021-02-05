@@ -6,6 +6,7 @@ import { MDXRenderer } from "gatsby-plugin-mdx"
 
 const WorkPage = ({ data, location }) => {
   const [linkActive, setLinkActive] = useState(false)
+  const { previous, next } = data
 
   const handleLinkPress = () => {
     setLinkActive(true)
@@ -24,7 +25,7 @@ const WorkPage = ({ data, location }) => {
   const mdx = data.mdx
   return (
     <Layout>
-      <Header my={0} link="/#subpage-1">
+      <Header my={0} link="/#">
         {mdx.frontmatter.title}
       </Header>
       <div className="absolute flex flex-col w-screen max-w-screen space-y-8 text-white mt-11 px-4 text-lg overflow-y-auto overflow-x-hidden pb-64">
@@ -38,9 +39,9 @@ const WorkPage = ({ data, location }) => {
                 🔗
               </span>
               <span
-                className={`pl-4 transition-opacity duration-700
-${linkActive ? "opacity-100" : "opacity-0"}
-`}
+                className={`pl-4 transition-opacity duration-700 ${
+                  linkActive ? "opacity-100" : "opacity-0"
+                } `}
               >
                 Link copied!
               </span>
@@ -60,13 +61,23 @@ ${linkActive ? "opacity-100" : "opacity-0"}
           </div>
         </div>
         <article>
-          <MDXRenderer>{mdx.body}</MDXRenderer>
+          <div className="flex flex-col space-y-4">
+            <MDXRenderer>{mdx.body}</MDXRenderer>
+          </div>
         </article>
-        <div className="pt-16">
-          <a href="/#subpage-1" className="py-3">
-            <span className="font-bold text-xl pr-2">←</span>
-            Back to all work
-          </a>
+        <div className="flex flex-row justify-between pt-16">
+          {previous && (
+            <a href={previous.fields.slug} className="py-3 flex-grow">
+              <span className="font-bold text-xl pr-2">←</span>
+              {previous.frontmatter.title}
+            </a>
+          )}
+          {next && (
+            <a href={next.fields.slug} className="py-3 flex-grow text-right">
+              {next.frontmatter.title}
+              <span className="font-bold text-xl pl-2">→</span>
+            </a>
+          )}
         </div>
       </div>
     </Layout>
@@ -76,7 +87,7 @@ ${linkActive ? "opacity-100" : "opacity-0"}
 export default WorkPage
 
 export const query = graphql`
-  query SingleWorkQuery($id: String!) {
+  query SingleWorkQuery($id: String!, $prevID: String, $nextID: String) {
     mdx(id: { eq: $id }) {
       id
       body
@@ -87,6 +98,22 @@ export const query = graphql`
       }
       fields {
         slug
+      }
+    }
+    previous: mdx(id: { eq: $prevID }) {
+      fields {
+        slug
+      }
+      frontmatter {
+        title
+      }
+    }
+    next: mdx(id: { eq: $nextID }) {
+      fields {
+        slug
+      }
+      frontmatter {
+        title
       }
     }
   }

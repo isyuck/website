@@ -1,7 +1,14 @@
 import React from "react"
 import PI from "../components/pi"
 
-const Header = ({ link, children, my = 2, mx = 2, index, arrows = false }) => {
+const Header = ({
+  link,
+  children,
+  my = 2,
+  mx = 2,
+  index = 0,
+  arrows = false,
+}) => {
   return (
     <>
       <a

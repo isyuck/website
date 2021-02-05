@@ -3,14 +3,7 @@ import { InView } from "react-intersection-observer"
 import Img from "gatsby-image"
 import ReactPlayer from "react-player/lazy"
 
-const Subpage = ({
-  children,
-  index = -1,
-  title,
-  onChange,
-  px = 4,
-  pt = 16,
-}) => {
+const Subpage = ({ children, index, title, onChange, px = 4, pt = 16 }) => {
   const idPrefix = "subpage-"
 
   return (

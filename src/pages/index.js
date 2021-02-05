@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import Header from "../components/header"
@@ -27,13 +27,17 @@ const Index = ({ data, location }) => {
 
   const handleViewChange = (inView, title, index) => {
     setActive(inView)
-    setIndex(index)
     if (inView) {
+      setIndex(index)
       setTitle(title)
     } else {
       setTitle("")
     }
   }
+
+  useEffect(() => {
+    setIndex(0)
+  }, [])
 
   return (
     <Layout>

@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import { Link, graphql } from "gatsby"
-import Layout from "../components/layout"
 import Header from "../components/header"
-import { MDXRenderer } from "gatsby-plugin-mdx"
+import Layout from "../components/layout"
+import Render from "../components/render"
 
 const WorkPage = ({ data, location }) => {
   const [linkActive, setLinkActive] = useState(false)
@@ -26,8 +26,8 @@ const WorkPage = ({ data, location }) => {
   return (
     <Layout>
       <Header link="/#">{mdx.frontmatter.title}</Header>
-      <div className="absolute flex flex-col w-screen max-w-screen space-y-8 text-black mt-11 px-4 text-lg overflow-y-auto overflow-x-hidden pb-64">
-        <div className="mb-4">
+      <div className="absolute flex flex-col w-screen max-w-screen space-y-8 text-black mt-11 text-lg overflow-y-auto overflow-x-hidden pb-64">
+        <div className="mb-4 mt-8 px-4">
           <div className="flex flex-row justify-between">
             <p
               onClick={() => handleLinkPress()}
@@ -59,8 +59,8 @@ const WorkPage = ({ data, location }) => {
           </div>
         </div>
         <article>
-          <div className="flex flex-col space-y-4">
-            <MDXRenderer>{mdx.body}</MDXRenderer>
+          <div className="flex flex-col space-y-8">
+            <Render body={mdx.body} />
           </div>
         </article>
         <div className="flex flex-row justify-between pt-16">

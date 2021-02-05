@@ -2,8 +2,7 @@ import React, { useState } from "react"
 import { Link, graphql } from "gatsby"
 import Header from "../components/header"
 import Layout from "../components/layout"
-import { MDXRenderer } from "gatsby-plugin-mdx"
-import { MDXProvider } from "@mdx-js/react"
+import Render from "../components/render"
 
 const BlogPost = ({ data, location }) => {
   const [linkActive, setLinkActive] = useState(false)
@@ -28,8 +27,8 @@ const BlogPost = ({ data, location }) => {
   return (
     <Layout>
       <Header link="/">{mdx.frontmatter.title}</Header>
-      <div className="absolute flex flex-col w-screen max-w-screen space-y-8 text-black mt-11 px-2 text-lg overflow-y-auto overflow-x-hidden pb-64">
-        <div className="mb-4">
+      <div className="absolute flex flex-col w-screen max-w-screen space-y-8 text-black mt-11 text-lg overflow-y-auto overflow-x-hidden pb-64">
+        <div className="mb-4 mt-8 px-4">
           <div className="flex flex-row justify-between">
             <p
               onClick={() => handleLinkPress()}
@@ -60,19 +59,20 @@ const BlogPost = ({ data, location }) => {
             ))}
           </div>
         </div>
+
         <article>
-          <div className="flex flex-col space-y-4">
-            <MDXRenderer>{mdx.body}</MDXRenderer>
+          <div className="flex flex-col space-y-8">
+            <Render body={mdx.body} />
           </div>
         </article>
 
-        <div className="flex flex-row justify-between pt-16">
-          (previous && (
-          <a href={previous.fields.slug} className="py-3 flex-grow">
-            <span className="font-bold text-xl pr-2">←</span>
-            {previous.frontmatter.title}
-          </a>
-          })
+        <div className="flex flex-row justify-between pt-16 px-4">
+          {previous && (
+            <a href={previous.fields.slug} className="py-3 flex-grow">
+              <span className="font-bold text-xl pr-2">←</span>
+              {previous.frontmatter.title}
+            </a>
+          )}
           {next && (
             <a href={next.fields.slug} className="py-3 flex-grow text-right">
               {next.frontmatter.title}

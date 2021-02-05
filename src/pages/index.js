@@ -13,6 +13,7 @@ const Index = ({ data, location }) => {
   const posts = data.allMdx
   const [title, setTitle] = useState("")
   const [active, setActive] = useState(true)
+  const [index, setIndex] = useState(0)
   const ref = useRef(null)
 
   SweetScroll.create(
@@ -24,8 +25,9 @@ const Index = ({ data, location }) => {
     ref.current
   )
 
-  const handleViewChange = (inView, title) => {
+  const handleViewChange = (inView, title, index) => {
     setActive(inView)
+    setIndex(index)
     if (inView) {
       setTitle(title)
     } else {
@@ -39,7 +41,7 @@ const Index = ({ data, location }) => {
         ref={ref}
         className="fixed inset-0 bg-white text-black overflow-y-hidden flex flex-row"
       >
-        <Header link="#subpage-0">
+        <Header link="#subpage-0" index={index} arrows={true}>
           <SwitchTransition mode="out-in">
             <FadeTransition
               key={active}
@@ -53,12 +55,7 @@ const Index = ({ data, location }) => {
         </Header>
 
         <div className="flex space-x-8">
-          <Subpage
-            index={0}
-            onChange={handleViewChange}
-            nextArrow={true}
-            title=""
-          >
+          <Subpage index={0} onChange={handleViewChange} title="">
             <div className="w-2/3 mt-8">
               <p>
                 <PI>{"A"}</PI>
@@ -107,13 +104,24 @@ const Index = ({ data, location }) => {
             ))}
           </Subpage>
 
-          <Subpage
-            title="Posts"
-            index={2}
-            onChange={handleViewChange}
-            nextArrow={false}
-            px={2}
-          >
+          <Subpage title="Music" index={2} onChange={handleViewChange} px={2}>
+            <p className="px-2 text-lg">
+              I sometimes make music. Usually I do this with code using the
+              wonderful pattern language{" "}
+              <a className="underline" href="https://tidalcycles.org/Welcome">
+                TidalCycles
+              </a>
+              . I perform under the name isyuck, and you'll find any of my music
+              related things here.
+            </p>
+            <div className="mt-8 px-2">
+              <a className="underline" href="">
+                Solstice Stream
+              </a>
+            </div>
+          </Subpage>
+
+          <Subpage title="Posts" index={3} onChange={handleViewChange} px={2}>
             <div className="flex flex-col space-y-16">
               {posts.edges.map(post => (
                 <div className="border-l-2 border-black pl-2 py-2 flex flex-col flex-shrink-0 space-y-4">

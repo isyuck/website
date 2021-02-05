@@ -53,7 +53,12 @@ const Index = ({ data, location }) => {
         </Header>
 
         <div className="flex space-x-8">
-          <Subpage index={0} onChange={handleViewChange} nextArrow={true}>
+          <Subpage
+            index={0}
+            onChange={handleViewChange}
+            nextArrow={true}
+            title=""
+          >
             <div className="w-2/3 mt-8">
               <p>
                 <PI>{"A"}</PI>
@@ -82,7 +87,12 @@ const Index = ({ data, location }) => {
             </div>
           </Subpage>
 
-          <Subpage title="Work" index={1} onChange={handleViewChange} px={0}>
+          <Subpage
+            title="Projects"
+            index={1}
+            onChange={handleViewChange}
+            px={0}
+          >
             {posts.edges.map(post => (
               <>
                 {post.node.frontmatter.cover !== null && (
@@ -97,16 +107,37 @@ const Index = ({ data, location }) => {
           </Subpage>
 
           <Subpage
-            title="Blog"
+            title="Posts"
             index={2}
             onChange={handleViewChange}
             nextArrow={false}
           >
-            {posts.edges.map(post => (
-              <a className="py-2" href={post.node.fields.slug}>
-                {post.node.frontmatter.title}
-              </a>
-            ))}
+            <div className="flex flex-col space-y-16">
+              {posts.edges.map(post => (
+                <div className="border-l-2 pl-4 flex flex-col flex-shrink-0 space-y-4">
+                  <a href={post.node.fields.slug}>
+                    {post.node.frontmatter.title}
+                  </a>
+                  <span className="flex-shrink">
+                    {post.node.frontmatter.date}
+                  </span>
+
+                  <div className="flex flex-wrap justify-left content-start text-lg">
+                    {post.node.frontmatter.tags.map(tag => (
+                      <>
+                        <a href="/" className="underline mr-2">
+                          {tag}
+                        </a>
+                      </>
+                    ))}
+                  </div>
+                  <p className="text-lg">{post.node.excerpt}</p>
+                  <a className="text-lg underline" href={post.node.fields.slug}>
+                    Read more
+                  </a>
+                </div>
+              ))}
+            </div>
           </Subpage>
         </div>
       </div>
@@ -115,9 +146,8 @@ const Index = ({ data, location }) => {
 }
 export default Index
 
-const WorkTile = ({ post }) => {
+const WorkTile = ({ post, root }) => {
   const [active, setActive] = useState(true)
-  const dt = 500
   return (
     <>
       <div
@@ -130,21 +160,23 @@ const WorkTile = ({ post }) => {
           {post.node.frontmatter.date}
         </span>
       </div>
-      <a
-        href={post.node.fields.slug}
-        onTouchStart={() => setActive(true)}
-        onTouchMove={() => setActive(true)}
-        onTouchEnd={() => setTimeout(() => setActive(false), 500)}
-        onMouseEnter={() => setActive(true)}
-        onMouseLeave={() => setTimeout(() => setActive(false), 500)}
-        className={`transition-all duration-700`}
-        style={{
-          marginTop: "-6.5rem",
-          filter: active ? "brightness(100%)" : "brightness(75%)",
-        }}
-      >
-        <Img fluid={post.node.frontmatter.cover.childImageSharp.fluid} />
-      </a>
+      <InView onChange={inview => setActive(inview)} threshold="0.5">
+        {({ inView, ref }) => (
+          <>
+            <a
+              href={post.node.fields.slug}
+              ref={ref}
+              className={`transition-all duration-1000`}
+              style={{
+                marginTop: "-6.5rem",
+                filter: active ? "brightness(100%)" : "brightness(75%)",
+              }}
+            >
+              <Img fluid={post.node.frontmatter.cover.childImageSharp.fluid} />
+            </a>
+          </>
+        )}
+      </InView>
     </>
   )
 }
@@ -174,11 +206,13 @@ export const pageQuery = graphql`
         node {
           id
           body
+          excerpt
           fields {
             slug
           }
           frontmatter {
             title
+            tags
             cover {
               childImageSharp {
                 fluid(maxWidth: 800) {

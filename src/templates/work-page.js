@@ -24,7 +24,7 @@ const WorkPage = ({ data, location }) => {
   const mdx = data.mdx
   return (
     <Layout>
-      <Header my={0} link="/">
+      <Header my={0} link="/#subpage-1">
         {mdx.frontmatter.title}
       </Header>
       <div className="absolute flex flex-col w-screen max-w-screen space-y-8 text-white mt-11 px-4 text-lg overflow-y-auto overflow-x-hidden pb-64">
@@ -49,10 +49,10 @@ ${linkActive ? "opacity-100" : "opacity-0"}
               {mdx.frontmatter.date}
             </span>
           </div>
-          <div className="flex flex-wrap justify-between space-x-2">
+          <div className="flex flex-wrap justify-left content-start text-lg">
             {mdx.frontmatter.tags.map(tag => (
               <>
-                <a href="/" className="underline">
+                <a href="/" className="underline mr-2">
                   {tag}
                 </a>
               </>

@@ -7,6 +7,9 @@ module.exports = {
     fontFamily: {
       sans: ["Fakt"],
       pixel: ["Neue Pixel Grotesk"],
+      bit: ["Neue Bit"],
+      mond: ["Mondwest"],
+      mont: ["Neue Montreal"],
     },
   },
   variants: {

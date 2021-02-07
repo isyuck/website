@@ -5,14 +5,16 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions
 
   // Define a template for blog post
-  const blogPage = path.resolve(`./src/templates/blog-page.js`)
-  const workPage = path.resolve("./src/templates/work-page.js")
+  const post = path.resolve(`./src/templates/post.js`)
 
-  // Get all markdown blog posts sorted by date
-  const blogQ = await graphql(
+  // Get all markdown posts sorted by date
+  const result = await graphql(
     `
-      query {
-        allMdx(filter: { fileAbsolutePath: { regex: "/blog/" } }) {
+      {
+        allMdx(
+          sort: { fields: [frontmatter___date], order: ASC }
+          limit: 1000
+        ) {
           nodes {
             id
             fields {
@@ -23,59 +25,23 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       }
     `
   )
-  if (blogQ.errors) {
+  if (result.errors) {
     reporter.panicOnBuild(
-      `There was an error loading your blog posts`,
+      `There was an error loading your posts`,
       result.errors
     )
     return
   }
 
-  const workQ = await graphql(
-    `
-      query {
-        allMdx(filter: { fileAbsolutePath: { regex: "/work/" } }) {
-          nodes {
-            id
-            fields {
-              slug
-            }
-          }
-        }
-      }
-    `
-  )
+  const posts = result.data.allMdx.nodes
 
-  if (workQ.errors) {
-    reporter.panicOnBuild(
-      `There was an error loading your work posts`,
-      result.errors
-    )
-    return
-  }
-
-  const bq = blogQ.data.allMdx.nodes
-  const wq = workQ.data.allMdx.nodes
-
-  if (bq.length > 0) {
-    bq.forEach((node, index) => {
-      const prevID = index === 0 ? null : bq[index - 1].id
-      const nextID = index === bq.length - 1 ? null : bq[index + 1].id
+  if (posts.length > 0) {
+    posts.forEach((node, index) => {
+      const prevID = index === 0 ? null : posts[index - 1].id
+      const nextID = index === posts.length - 1 ? null : posts[index + 1].id
       createPage({
         path: node.fields.slug,
-        component: blogPage,
-        context: { id: node.id, prevID, nextID },
-      })
-    })
-  }
-
-  if (wq.length > 0) {
-    wq.forEach((node, index) => {
-      const prevID = index === 0 ? null : wq[index - 1].id
-      const nextID = index === wq.length - 1 ? null : wq[index + 1].id
-      createPage({
-        path: node.fields.slug,
-        component: workPage,
+        component: post,
         context: { id: node.id, prevID, nextID },
       })
     })

@@ -7,7 +7,7 @@ const Render = ({ body }) => {
     <MDXProvider
       components={{
         p: props => <p {...props} className="px-4" />,
-        h1: props => <h1 {...props} className="px-4" />,
+        h1: props => <h1 {...props} className="px-4 font-mond text-3xl" />,
         h2: props => <h2 {...props} className="px-4" />,
         h3: props => <h3 {...props} className="px-4" />,
         h4: props => <h4 {...props} className="px-4" />,
@@ -28,7 +28,13 @@ const Render = ({ body }) => {
         strong: props => <strong {...props} />,
         delete: props => <delete {...props} className="" />,
         hr: props => <hr {...props} className="px-4" />,
-        a: props => <a {...props} className="underline" />,
+        a: props => (
+          <a
+            {...props}
+            className="underline font-mond text-xl"
+            style={{ color: "#0000ff" }}
+          />
+        ),
         pre: props => (
           <pre
             {...props}

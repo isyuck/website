@@ -41,33 +41,29 @@ const Post = ({ data, location }) => {
       <Header link="/#">{mdx.frontmatter.title}</Header>
       <div className="absolute flex flex-col w-screen max-w-screen space-y-8 text-black mt-11 text-lg overflow-y-auto overflow-x-hidden pb-64">
         <div className="px-4 mt-8">
-          <span
-            className="font-mont rounded-full px-3 pb-0.5 text-lg flex-shrink h-8 mt-2"
-            style={{
-              backgroundColor: `${typeToColor(mdx.frontmatter.type)}`,
-            }}
-          >
-            {mdx.frontmatter.type}
-          </span>
-          <p
-            onClick={() => handleLinkPress()}
-            className="mb-1 flex-grow mr-16 py-2 mt-3"
-          >
-            <span aria-label="link" role="img">
-              🔗
-            </span>
+          <div className="flex flex-row">
             <span
-              className={`pl-2 font-sans text-base transition-opacity duration-500 italic ${
-                linkActive ? "opacity-100" : "opacity-0"
-              } `}
+              className={` font-mont rounded-full px-3 mr-4 pb-0.5 text-lg bg-gradient-to-r from-gray-300 via-purple-200 to-gray-400 `}
             >
-              {"copied"}
-              <span className="text-base pl-2">💖</span>
+              {mdx.frontmatter.type}
             </span>
-          </p>
-          <span className="font-bit pt-1.5 inline-block text-2xl">
-            {mdx.frontmatter.date}
-          </span>
+            <p onClick={() => handleLinkPress()} className="mb-1 flex-grow">
+              <span aria-label="link" role="img">
+                🔗
+              </span>
+              <span
+                className={`pl-2 font-sans text-base transition-opacity duration-500 italic ${
+                  linkActive ? "opacity-100" : "opacity-0"
+                } `}
+              >
+                {"copied"}
+                <span className="text-base pl-2">💖</span>
+              </span>
+            </p>
+            <span className="font-bit inline-block text-2xl">
+              {mdx.frontmatter.date}
+            </span>
+          </div>
 
           <div className="flex mt-4 flex-row space-x-4 overflow-x-auto">
             {mdx.frontmatter.tags.map(tag => (
@@ -112,7 +108,7 @@ export const query = graphql`
       body
       frontmatter {
         title
-        date(formatString: "DD MMMM YYYY")
+        date(formatString: "MMM YYYY")
         tags
         type
       }

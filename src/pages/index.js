@@ -1,39 +1,26 @@
 import React, { useRef, useState, useEffect } from "react"
 import { StaticQuery, graphql } from "gatsby"
 import Img from "gatsby-image"
-import Render from "../components/render"
+import Header from "../components/header"
 
 const TestIndex = ({ data, location }) => {
   const things = data.allMdx
-  const [rerenderEmojis, setRerenderEmojis] = useState(0)
 
   return (
     <>
       {/* <div */}
-      {/*   className="fixed inset-0 opacity-40 w-screen h-1/2 pointer-events-none bg-gradient-to-b from-white via-blue-500 to-pink-500 z-0" */}
-      {/*   style={{ marginTop: "50vh" }} */}
+      {/*   className="fixed inset-0 opacity-80 w-screen h-screen pointer-events-none bg-gradient-to-b from-pink-400 to-purple-400 z-0" */}
+      {/*   /\* style={{ marginTop: "50vh" }} *\/ */}
       {/* /> */}
-      <div className="fixed top-0 left-0 right-0 flex flex-row justify-between text-2xl z-10 pt-2 px-4 items-end">
-        <p
-          onClick={() => setRerenderEmojis(Math.random())}
-          className="underline font-mond pb-1"
-          style={{ color: "#0000ff" }}
-        >
-          isaac spicer
-        </p>
-        <p className="italic text-xl font-mont">
-          artist
-          <span className="font-bit text-2xl">/</span>
-          programmer
-        </p>
-      </div>
+      <Header>artist/programmer</Header>
+
       <div className="relative">
-        <div className="text-xl ml-4 mt-16 font-mont z-10">
+        <div className="text-lg ml-4 mt-16 font-sans z-10">
           <p>
             {"i have an "}
             <span
               className="px-1 underline font-bit text-2xl "
-              style={{ color: "#00ff00" }}
+              style={{ color: "#ff0000" }}
             >
               E-MAIL
             </span>
@@ -42,7 +29,7 @@ const TestIndex = ({ data, location }) => {
             i am on{" "}
             <span
               className="px-2 underline font-bit text-2xl "
-              style={{ color: "#ff0000" }}
+              style={{ color: "#00ff00" }}
             >
               GITHUB
             </span>
@@ -53,40 +40,11 @@ const TestIndex = ({ data, location }) => {
             >
               INSTAGRAM
             </span>
-            <marquee direction="right" className="w-4">
-              <span className="font-sans pl-2">→</span>
-            </marquee>
           </p>
         </div>
         <div className="mt-4">
           {things.nodes.map((thing, index) => (
-            <div className="top-0 left-0 text-2xl py-1 border-black">
-              <div className="flex flex-row space-x-8 px-4 overflow-x-scroll items-center">
-                <span className="flex-shrink-0 font-bit pt-0.5 inline-block">
-                  {thing.frontmatter.date}
-                </span>
-                <RandEmoji rerender={rerenderEmojis} />
-                <span
-                  className="flex-shrink-0 font-mond underline"
-                  style={{ color: "#0000ff" }}
-                >
-                  {thing.frontmatter.title}
-                </span>
-                <div className="flex flex-row space-x-4">
-                  <span
-                    className="font-mont rounded-full px-3 pb-0.5 text-lg"
-                    style={{ backgroundColor: "#00ff00" }}
-                  >
-                    {"text"}
-                  </span>
-                  {thing.frontmatter.tags.map(tag => (
-                    <span className="flex-shrink-0 text-xl italic font-mont">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <Tile info={thing} />
           ))}
         </div>
       </div>
@@ -96,9 +54,53 @@ const TestIndex = ({ data, location }) => {
 
 export default TestIndex
 
+const Tile = ({ info }) => {
+  const [emojiSeed, setEmojiSeed] = useState(0)
+  const newEmoji = () => {
+    setEmojiSeed(Math.random())
+  }
+  return (
+    <div
+      className="top-0 left-0 text-2xl py-1 border-black"
+      onTouchStart={newEmoji}
+      onMouseEnter={newEmoji}
+    >
+      <div className="flex flex-row space-x-8 px-4 overflow-x-auto items-center">
+        <RandEmoji rerender={emojiSeed} />
+        <a
+          href={info.fields.slug}
+          className="flex-shrink-0 font-mond underline"
+          style={{ color: "#0000ff" }}
+        >
+          {info.frontmatter.title}
+        </a>
+        <div className="flex flex-row space-x-4">
+          <span
+            className={` font-mont rounded-full px-3 mr-4 pb-0.5 text-lg bg-gradient-to-r from-gray-300 via-purple-200 to-gray-400 `}
+          >
+            {info.frontmatter.type}
+          </span>
+          {info.frontmatter.tags.map((tag, index) => (
+            <span className="flex-shrink-0 text-xl italic font-mont">
+              {tag}
+            </span>
+          ))}
+          <span className="flex-shrink-0 font-bit px-4 inline-block">
+            {info.frontmatter.date}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const RandEmoji = ({ rerender }) => {
   const emojis = require("emoji.json/emoji-compact.json")
-  return <span>{emojis[Math.floor(Math.random() * emojis.length)]}</span>
+  return (
+    <span>
+      {emojis[Math.floor(Math.random() * emojis.length)].substring(0, 2)}
+    </span>
+  )
 }
 
 export const pageQuery = graphql`
@@ -111,22 +113,14 @@ export const pageQuery = graphql`
     allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
       nodes {
         id
-        body
-        excerpt
         fields {
           slug
         }
         frontmatter {
           title
           tags
-          cover {
-            childImageSharp {
-              fluid(maxWidth: 800) {
-                ...GatsbyImageSharpFluid
-              }
-            }
-          }
-          date(formatString: "YYYY")
+          type
+          date(formatString: "MMM, YYYY")
         }
       }
     }

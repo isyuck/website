@@ -6,6 +6,8 @@ const Emoji = ({ data, location }) => {
   const [beta, setBeta] = useState(0)
   const [alpha, setAlpha] = useState(0)
 
+  const [motionGranted, setMotionGranted] = useState(false)
+
   useEffect(() => {
     if (window.DeviceOrientationEvent) {
       window.ondeviceorientation = e => handleOrientation(e)
@@ -35,7 +37,27 @@ const Emoji = ({ data, location }) => {
   }
 
   const newEmoji = () => {
-    setEmoji(emojis[Math.floor(Math.random() * emojis.length)].substring(0, 2))
+    if (motionGranted) {
+      const requestMotionAccess = () => {
+        if (typeof DeviceOrientationEvent.requestPermission === "function") {
+          DeviceOrientationEvent.requestPermission()
+            .then(permissionState => {
+              if (permissionState === "granted") {
+                window.addEventListener("deviceorientation", handleOrientation)
+                setMotionGranted(true)
+              }
+            })
+            .catch(console.error)
+        } else {
+          window.addEventListener("deviceorientation", handleOrientation)
+          setMotionGranted(true)
+        }
+      }
+    } else {
+      setEmoji(
+        emojis[Math.floor(Math.random() * emojis.length)].substring(0, 2)
+      )
+    }
   }
 
   const emojis = require("emoji.json/emoji-compact.json")

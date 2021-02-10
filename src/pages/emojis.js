@@ -67,7 +67,7 @@ const Emoji = ({ data, location }) => {
 
   return (
     <>
-      <Header>emojis</Header>
+      <Header href="/emojis">emojis</Header>
       <div
         onClick={() => requestMotionAccess()}
         className="text-center w-screen fixed h-screen overflow-hidden"

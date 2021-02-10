@@ -105,16 +105,6 @@ export const query = graphql`
   query postQuery($id: String!, $prevID: String, $nextID: String) {
     mdx(id: { eq: $id }) {
       id
-      body
-      frontmatter {
-        title
-        date(formatString: "MMM YYYY")
-        tags
-        type
-      }
-      fields {
-        slug
-      }
     }
     previous: mdx(id: { eq: $prevID }) {
       fields {

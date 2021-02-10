@@ -91,6 +91,7 @@ const Emoji = ({ data, location }) => {
           style={{ marginTop: "80vh" }}
         >
           <input
+            className="z-30"
             value={emoji}
             onChange={evt => setEmoji(evt.target.value)}
             maxLength={3}

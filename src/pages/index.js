@@ -87,7 +87,7 @@ const Index = ({ data, location }) => {
         </div>
         <div className="mt-4 grid w-screen justify-items-center relative h-8">
           <button
-            className={`absolute transition-opacity delay-1000 duration-1000 text-base px-3 font-sans text-center rounded-full border-purple-300
+            className={`absolute transition-opacity lg:invisible delay-1000 duration-1000 text-base px-3 font-sans text-center rounded-full border-purple-300
   opacity-${motionGranted ? "0" : "100"}
 `}
             style={{ backgroundColor: "#00ff00" }}
@@ -96,7 +96,7 @@ const Index = ({ data, location }) => {
             {motionGranted ? "← rotate device to scroll →" : "press me"}
           </button>
         </div>
-        <div className="mt-2">
+        <div className="mt-2 flex flex-col">
           <Tile
             scroll={gamma}
             title={"emojis"}
@@ -128,10 +128,6 @@ const Tile = ({ scroll, title, type, tags, date, slug }) => {
   const [loaded, setLoaded] = useState(false)
   const ref = useRef()
 
-  const newEmoji = () => {
-    setEmojiSeed(Math.random())
-  }
-
   useEffect(() => {
     const el = ref.current
     const s = Math.sin(Math.abs(scroll) * 0.03)
@@ -139,18 +135,12 @@ const Tile = ({ scroll, title, type, tags, date, slug }) => {
   })
 
   return (
-    <div
-      className="top-0 left-0 text-2xl py-1"
-      onTouchStart={newEmoji}
-      onMouseEnter={newEmoji}
-    >
+    <a href={slug} className="top-0 left-0 text-2xl py-1">
       <div
         ref={ref}
         className="flex flex-row space-x-8 px-4 overflow-x-auto items-center"
       >
-        {/* <RandEmoji rerender={emojiSeed} /> */}
         <a
-          href={slug}
           className="flex-shrink-0 font-mond underline"
           style={{ color: "#0000ff" }}
         >
@@ -173,16 +163,7 @@ const Tile = ({ scroll, title, type, tags, date, slug }) => {
           </span>
         </div>
       </div>
-    </div>
-  )
-}
-
-const RandEmoji = ({ rerender }) => {
-  const emojis = require("emoji.json/emoji-compact.json")
-  return (
-    <span>
-      {emojis[Math.floor(Math.random() * emojis.length)].substring(0, 2)}
-    </span>
+    </a>
   )
 }
 

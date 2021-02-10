@@ -22,8 +22,6 @@ build/
 node_modules/
 .cache/
 public/
-static/
-content/work/
 
 .prettierrc
 .prettierignore

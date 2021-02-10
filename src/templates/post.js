@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Link, graphql } from "gatsby"
+import { graphql } from "gatsby"
 import Header from "../components/header"
 import Layout from "../components/layout"
 import Render from "../components/render"
@@ -80,17 +80,17 @@ const Post = ({ data, location }) => {
             <Render body={mdx.body} />
           </div>
         </article>
-        <div className="flex flex-row justify-between pt-16 px-4">
+        <div className="flex font-mont italic flex-row justify-between pt-16 px-4">
           {previous && (
             <a href={previous.fields.slug} className="py-3 flex-grow">
-              <span className="font-bold text-xl pr-2">←</span>
+              <span className="font-bold pr-2">←</span>
               {previous.frontmatter.title}
             </a>
           )}
           {next && (
             <a href={next.fields.slug} className="py-3 flex-grow text-right">
               {next.frontmatter.title}
-              <span className="font-bold text-xl pl-2">→</span>
+              <span className="font-bold pl-2">→</span>
             </a>
           )}
         </div>

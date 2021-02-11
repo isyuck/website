@@ -196,7 +196,11 @@ const Emoji = ({ data, location }) => {
             </button>
           ))}
           <div className="fixed flex flex-row bottom-0 justify-between w-screen text-xl">
-            <span className="text-left p-4 text-xl " style={{ zIndex: "9999" }}>
+            <span
+              onClick={() => setCtrlOpen(!ctrlOpen)}
+              className="text-left p-4 text-xl "
+              style={{ zIndex: "9999" }}
+            >
               {emoji}
             </span>
           </div>
@@ -280,6 +284,7 @@ ${ctrlOpen ? "pointer-events-auto" : "pointer-events-none"}
         <div
           onClick={() => setCtrlOpen(!ctrlOpen)}
           className={`sticky pointer-events-auto flex-grow`}
+          style={{ zIndex: "99999" }}
         />
       </div>
     </>

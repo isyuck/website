@@ -5,56 +5,56 @@
   font-family: "Akkurat";
   font-weight: bold;
   font-style: normal;
-  src: url("../fonts/akkurat-mono.woff");
+  src: url("/fonts/akkurat-mono.woff");
 }
 
 @font-face {
   font-family: "Fakt";
   font-weight: normal;
   font-style: normal;
-  src: url("../fonts/FaktPro-Normal.woff");
+  src: url("/fonts/faktpro-normal.woff");
 }
 
 @font-face {
   font-family: "Fakt";
   font-weight: normal;
   font-style: italic;
-  src: url("../fonts/FaktPro-NormalItalic.woff");
+  src: url("/fonts/faktpro-normalitalic.woff");
 }
 
 @font-face {
   font-family: "Fakt";
   font-weight: bold;
   font-style: normal;
-  src: url("../fonts/FaktPro-SemiBold.woff");
+  src: url("/fonts/faktpro-semibold.woff");
 }
 
 @font-face {
   font-family: "Neue Pixel Grotesk";
   font-weight: normal;
   font-style: normal;
-  src: url("../fonts/NeuePixelGrotesk.woff");
+  src: url("/fonts/neuepixelgrotesk.woff");
 }
 
 @font-face {
   font-family: "Neue Bit";
   font-weight: normal;
   font-style: normal;
-  src: url("../fonts/NeueBit-Bold.otf");
+  src: url("/fonts/neuebit-bold.otf");
 }
 
 @font-face {
-  font-family: "Mondwest";
+  font-family: "mondwest";
   font-weight: normal;
   font-style: normal;
-  src: url("../fonts/Mondwest-Regular.otf");
+  src: url("/fonts/mondwest-regular.otf");
 }
 
 @font-face {
   font-family: "Neue Montreal";
   font-weight: normal;
   font-style: normal;
-  src: url("../fonts/NeueMontreal-Regular.otf");
+  src: url("/fonts/neuemontreal-regular.otf");
 }
 
 @tailwind utilities;

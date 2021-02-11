@@ -13,6 +13,7 @@ const Layout = ({ location, title, children }) => {
         <meta charSet="utf-8" />
         <title>Isaac Spicer</title>
         <link rel="canonical" href="https://isaac.ac" />
+        />
         <meta
           name="apple-mobile-web-app-capable"
           content="yes, width = device-width, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable = no"

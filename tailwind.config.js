@@ -1,7 +1,7 @@
 // tailwind.config.js
 module.exports = {
   purge: [],
-  purge: ["./pages/**/*.js", "./components/**/*.js"],
+  purge: ["./src/**/*.{js,jsx,ts,tsx}"],
   darkMode: false,
   theme: {
     fontFamily: {
@@ -10,6 +10,7 @@ module.exports = {
       bit: ["Neue Bit"],
       mond: ["Mondwest"],
       mont: ["Neue Montreal"],
+      mono: ["Akkurat"],
     },
   },
   variants: {

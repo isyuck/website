@@ -76,11 +76,10 @@ const Emoji = ({ data, location }) => {
     },
   ])
 
-  const [gamma, setGamma] = useState(0)
-  const [beta, setBeta] = useState(0)
-  const [alpha, setAlpha] = useState(0)
-
   const [motionGranted, setMotionGranted] = useState(false)
+  const [gamma, setGamma] = useState(0)
+
+  // 'freeze' input from device rotation
   const [freeze, setFreeze] = useState(false)
 
   useEffect(() => {
@@ -89,13 +88,19 @@ const Emoji = ({ data, location }) => {
     }
   })
 
+  const handleOrientation = e => {
+    if (!freeze) {
+      setGamma(e.gamma)
+    }
+  }
+
   const requestMotionAccess = () => {
     if (typeof DeviceOrientationEvent.requestPermission === "function") {
       DeviceOrientationEvent.requestPermission()
         .then(permissionState => {
           if (permissionState === "granted") {
             window.addEventListener("deviceorientation", handleOrientation)
-            document.getElementById("reqbutton").remove()
+            setMotionGranted(true)
           }
         })
         .catch(console.error)
@@ -104,66 +109,51 @@ const Emoji = ({ data, location }) => {
     }
   }
 
-  const handleOrientation = e => {
-    if (!freeze) {
-      setGamma(e.gamma)
-      setBeta(e.beta)
-      setAlpha(e.alpha)
-    }
+  const newEmoji = () => {
+    setEmoji(emojis[Math.floor(Math.random() * emojis.length)].substring(0, 2))
   }
 
-  const newEmoji = () => {
-    if (motionGranted) {
-      const requestMotionAccess = () => {
-        if (typeof DeviceOrientationEvent.requestPermission === "function") {
-          DeviceOrientationEvent.requestPermission()
-            .then(permissionState => {
-              if (permissionState === "granted") {
-                window.addEventListener("deviceorientation", handleOrientation)
-                setMotionGranted(true)
-              }
-            })
-            .catch(console.error)
-        } else {
-          window.addEventListener("deviceorientation", handleOrientation)
-          setMotionGranted(true)
-        }
-      }
-    } else {
-      setEmoji(
-        emojis[Math.floor(Math.random() * emojis.length)].substring(0, 2)
-      )
-    }
-  }
   const emojis = require("emoji.json/emoji-compact.json")
   const [emoji, setEmoji] = useState(emojis[0])
 
   const [ctrlOpen, setCtrlOpen] = useState(false)
 
   const updateOnCtrlChange = (index, value, active) => {
-    let a = [...ctrlValues]
-    a[index].value = value
-    a[index].active = active
-    setCtrlValues(a)
+    let cv = [...ctrlValues]
+    cv[index].value = value
+    cv[index].active = active
+    setCtrlValues(cv)
   }
 
   return (
     <>
       <Header href="/emojis">emojis</Header>
-      <div
-        onClick={() => requestMotionAccess()}
-        className="text-center w-screen fixed h-screen overflow-hidden"
-        style={{ fontSize: `${ctrlValues[1].value}px` }}
-      >
-        <div>
-          {[...Array(ctrlValues[0].value)].map((x, i) => (
+      {!motionGranted && (
+        <div className="fixed flex inset-0 w-screen h-screen">
+          <div className="text-center m-auto">
             <button
-              onClick={() => newEmoji()}
-              className={`fixed z-0 left-0 pb-16 h-screen w-screen ${
-                ctrlOpen ? "pointer-events-none" : "pointer-events-auto"
-              }`}
-              style={{
-                transform: `
+              onClick={() => requestMotionAccess()}
+              className="mb-20 p-8 text-xl"
+            >
+              tap to allow motion and orientation
+            </button>
+          </div>
+        </div>
+      )}
+      {motionGranted && (
+        <div
+          className="text-center w-screen fixed h-screen overflow-hidden"
+          style={{ fontSize: `${ctrlValues[1].value}px` }}
+        >
+          <div>
+            {[...Array(ctrlValues[0].value)].map((x, i) => (
+              <button
+                onClick={() => newEmoji()}
+                className={`fixed z-0 left-0 pb-16 h-screen w-screen ${
+                  ctrlOpen ? "pointer-events-none" : "pointer-events-auto"
+                }`}
+                style={{
+                  transform: `
                         ${
                           ctrlValues[2].active
                             ? `rotateY(${(gamma + i) * ctrlValues[2].value}deg)`
@@ -190,22 +180,23 @@ const Emoji = ({ data, location }) => {
                             : "scaleY(1)"
                         }
           `,
-              }}
-            >
-              {emoji}
-            </button>
-          ))}
-          <div className="fixed flex flex-row bottom-0 justify-between w-screen text-xl">
-            <span
-              onClick={() => setCtrlOpen(!ctrlOpen)}
-              className="text-left p-4 text-xl "
-              style={{ zIndex: "9999" }}
-            >
-              {emoji}
-            </span>
+                }}
+              >
+                {emoji}
+              </button>
+            ))}
+            <div className="fixed flex flex-row bottom-0 justify-between w-screen text-xl">
+              <span
+                onClick={() => setCtrlOpen(!ctrlOpen)}
+                className="text-left p-4 text-xl "
+                style={{ zIndex: "9999" }}
+              >
+                {emoji}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div
         style={{ zIndex: "9999" }}

@@ -17,7 +17,7 @@
   font-family: "Akkurat";
   font-weight: bold;
   font-style: normal;
-  src: url("../fonts/akkurat-mono.woff");
+  src: url("/fonts/akkurat-mono.woff");
 }
 
 pre[class*="language-"],

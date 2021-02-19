@@ -12,17 +12,17 @@ const Emoji = ({ data, location }) => {
       maxVal: 90,
       step: 1,
       active: true,
-      hasCheckbox: false,
+      axis: "y",
     },
     {
       id: 1,
-      name: "scale",
+      name: "size",
       value: 200,
       minVal: 10,
       maxVal: 500,
       step: 3,
       active: true,
-      hasCheckbox: false,
+      axis: "y",
     },
     {
       id: 2,
@@ -32,47 +32,97 @@ const Emoji = ({ data, location }) => {
       maxVal: 10,
       step: 0.01,
       active: true,
-      hasCheckbox: true,
+      axis: "y",
     },
     {
       id: 3,
-      name: "skew X",
-      value: 0.08,
+      name: "saturation",
+      value: 100,
       minVal: 0,
-      maxVal: 2,
-      step: 0.01,
+      maxVal: 500,
+      step: 1,
       active: true,
-      hasCheckbox: true,
+      axis: "y",
     },
     {
       id: 4,
-      name: "skew Y",
-      value: 0.08,
+      name: "blur step",
+      value: 0,
       minVal: 0,
-      maxVal: 4.5,
+      maxVal: 3,
       step: 0.01,
       active: true,
-      hasCheckbox: true,
+      axis: "y",
     },
     {
       id: 5,
-      name: "scale X",
-      value: 0.5,
+      name: "hue step",
+      value: 0,
       minVal: 0,
-      maxVal: 1,
-      step: 0.01,
-      active: false,
-      hasCheckbox: true,
+      maxVal: 20,
+      step: 0.1,
+      active: true,
+      axis: "y",
     },
     {
       id: 6,
-      name: "scale Y",
-      value: 0.5,
+      name: "invert",
+      value: 0,
       minVal: 0,
-      maxVal: 1,
+      maxVal: 100,
+      step: 1,
+      active: true,
+      axis: "y",
+    },
+    {
+      id: 7,
+      name: "opacity",
+      value: 100,
+      minVal: 0,
+      maxVal: 100,
+      step: 1,
+      active: true,
+      axis: "y",
+    },
+    {
+      id: 8,
+      name: "brightness step",
+      value: 100,
+      minVal: 0,
+      maxVal: 300,
+      step: 1,
+      active: true,
+      axis: "y",
+    },
+    {
+      id: 9,
+      name: "contrast step",
+      value: 100,
+      minVal: 0,
+      maxVal: 300,
+      step: 1,
+      active: true,
+      axis: "y",
+    },
+    {
+      id: 10,
+      name: "skew",
+      value: { x: 0.5, y: 0.5 },
+      minVal: -2,
+      maxVal: 2,
       step: 0.01,
       active: false,
-      hasCheckbox: true,
+      axis: "xy",
+    },
+    {
+      id: 11,
+      name: "scale",
+      value: { x: 0.5, y: 0.5 },
+      minVal: -1,
+      maxVal: 1,
+      step: 0.001,
+      active: false,
+      axis: "xy",
     },
   ])
 
@@ -83,6 +133,7 @@ const Emoji = ({ data, location }) => {
   const [freeze, setFreeze] = useState(false)
 
   useEffect(() => {
+    document.body.style.overflow = "hidden"
     if (window.DeviceOrientationEvent) {
       window.ondeviceorientation = e => handleOrientation(e)
     }
@@ -93,6 +144,11 @@ const Emoji = ({ data, location }) => {
       setGamma(e.gamma)
     }
   }
+
+  useEffect(() => {
+    setCtrlOpen(true)
+    setTimeout(setCtrlOpen(false), 3000)
+  }, [])
 
   const requestMotionAccess = () => {
     if (typeof DeviceOrientationEvent.requestPermission === "function") {
@@ -125,9 +181,27 @@ const Emoji = ({ data, location }) => {
     setCtrlValues(cv)
   }
 
+  const emojiInput = useRef(null)
+
   return (
     <>
-      <Header href="/emojis">emojis</Header>
+      <div className="fixed flex inset-0 w-screen h-screen pointer-events-none z-0">
+        <div
+          onClick={() => newEmoji()}
+          className="m-auto w-2/3 h-2/3 pointer-events-auto"
+        ></div>
+      </div>
+      <div
+        onClick={() => setCtrlOpen(!ctrlOpen)}
+        className="fixed top-0 left-0 right-0 flex flex-row justify-between text-2xl z-10 pt-2 px-4 items-end"
+      >
+        <p className="underline font-mond pb-1" style={{ color: "#0000ff" }}>
+          emojis
+        </p>
+        {/* </p> */}
+
+        <p className="italic text-xl pb-1 font-mont">{emoji}</p>
+      </div>
       {!motionGranted && (
         <div className="fixed flex inset-0 w-screen h-screen">
           <div className="text-center m-auto">
@@ -140,149 +214,148 @@ const Emoji = ({ data, location }) => {
           </div>
         </div>
       )}
+      <div
+        className="absolute flex flex-row inset-0 w-screen h-screen transform duration-500 z-30"
+        style={{
+          transform: `${ctrlOpen ? "translateX(0)" : "translateX(calc(80vw))"}`,
+        }}
+      >
+        <div
+          onClick={() => setCtrlOpen(!ctrlOpen)}
+          className={`h-screen w-1/2 flex pointer-events-auto`}
+        ></div>
+        <div className="w-1/2 pt-4 px-3 flex flex-col space-y-4 overflow-y-auto bg-gray-100 border-l border-gray-300 text-gray-600">
+          <div
+            className="flex-shrink-0 h-8 relative w-full"
+            style={{ maxWidth: "50vw" }}
+          >
+            <input
+              className="absolute inset-0 pl-14 h-7 bg-transparent pb-1 text-left"
+              onFocus={e => (e.value = "")}
+              value={emoji}
+              onChange={evt => setEmoji(evt.target.value)}
+              maxLength={3}
+            />
+            <span className="absolute inset-0 pointer-events-none">emoji:</span>
+            <span className="absolute inset-0 pointer-events-none"></span>
+          </div>
+          <div className="flex-shrink-0 w-full" style={{ maxWidth: "50vw" }}>
+            <div className="flex flex-col w-full space-y-8 mb-16">
+              <button onClick={() => newEmoji()} className="text-left">
+                randomise
+              </button>
+              {ctrlValues.map((ctrl, index) => (
+                <>
+                  {ctrl.axis === "y" && (
+                    <ControlSingle
+                      name={ctrl.name}
+                      onChange={(value, active) =>
+                        updateOnCtrlChange(index, value, active)
+                      }
+                      min={ctrl.minVal}
+                      max={ctrl.maxVal}
+                      start={ctrl.value}
+                      step={ctrl.step}
+                      active={ctrl.active}
+                      hasCheckbox={ctrl.hasCheckbox}
+                    />
+                  )}
+                  {ctrl.axis === "xy" && (
+                    <ControlDouble
+                      name={ctrl.name}
+                      onChange={(value, active) =>
+                        updateOnCtrlChange(index, value, active)
+                      }
+                      min={ctrl.minVal}
+                      max={ctrl.maxVal}
+                      start={ctrl.value}
+                      step={ctrl.step}
+                      active={ctrl.active}
+                      hasCheckbox={ctrl.hasCheckbox}
+                    />
+                  )}
+                </>
+              ))}
+              <p>
+                use your phone's rotation and the controls above to manipulate
+                the emoji(s)
+              </p>
+              <p>
+                {
+                  "this webpage can/will crash your browser or phone. to help prevent this, keep the emoji count low, and avoid zooming in."
+                }
+              </p>
+              <p>designed for and tested on iOS 14.</p>
+              <p>
+                {"developed by "}
+                <a className="underline" href="/">
+                  {"isaac spicer"}
+                </a>
+                {"."}
+              </p>
+              <a
+                className="underline"
+                href="https://github.com/isyuck/website/blob/master/src/pages/emojis.js"
+              >
+                {"view source"}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
       {motionGranted && (
         <div
-          className="text-center w-screen fixed h-screen overflow-hidden"
-          style={{ fontSize: `${ctrlValues[1].value}px` }}
+          className="absolute text-center max-h-screen h-screen transform duration-500 overflow-hidden pointer-events-none"
+          style={{
+            fontSize: `${ctrlValues[1].value}px`,
+            transform: `${
+              ctrlOpen ? "translateX(calc(-20vw - 0rem))" : "translateX(0)"
+            }`,
+            width: `${ctrlOpen ? "70vw" : "100vw"}`,
+          }}
         >
-          <div>
+          <div className="flex relative h-screen w-screen">
             {[...Array(ctrlValues[0].value)].map((x, i) => (
               <button
-                onClick={() => newEmoji()}
-                className={`fixed z-0 left-0 pb-16 h-screen w-screen ${
-                  ctrlOpen ? "pointer-events-none" : "pointer-events-auto"
-                }`}
+                className={`absolute my-auto z-0 h-full w-full overflow-hidden`}
                 style={{
+                  filter: `saturate(${ctrlValues[3].value}%)
+                         blur(${i * ctrlValues[4].value}px)
+                         hue-rotate(${i * ctrlValues[5].value}deg)
+                         invert(${ctrlValues[6].value}%)
+                         opacity(${ctrlValues[7].value}%)
+                         brightness(${ctrlValues[8].value}%)
+                         contrast(${ctrlValues[9].value}%)
+`,
                   transform: `
-                        ${
-                          ctrlValues[2].active
-                            ? `rotateY(${(gamma + i) * ctrlValues[2].value}deg)`
-                            : ""
-                        }
-                        ${
-                          ctrlValues[3].active
-                            ? `skewX(${i * ctrlValues[3].value}deg)`
-                            : ""
-                        }
-                        ${
-                          ctrlValues[4].active
-                            ? `skewY(${i * ctrlValues[4].value}deg)`
-                            : ""
-                        }
-                        ${
-                          ctrlValues[5].active
-                            ? `scaleX(${i * ctrlValues[5].value})`
-                            : "scaleX(1)"
-                        }
-                        ${
-                          ctrlValues[6].active
-                            ? `scaleY(${i * ctrlValues[6].value})`
-                            : "scaleY(1)"
-                        }
-          `,
+/* rotateY(${(gamma + i) * ctrlValues[2].value}deg) */
+rotateY(${Date.now() * 0.05 + i * 4}deg)
+${
+  ctrlValues[10].active
+    ? ` skew(${i * ctrlValues[10].value.x}deg, ${
+        i * ctrlValues[10].value.y
+      }deg)`
+    : ""
+}
+${
+  ctrlValues[11].active
+    ? ` scale(${i * ctrlValues[11].value.x}, ${i * ctrlValues[11].value.y})`
+    : ""
+}
+`,
                 }}
               >
                 {emoji}
               </button>
             ))}
-            <div className="fixed flex flex-row bottom-0 justify-between w-screen text-xl">
-              <span
-                onClick={() => setCtrlOpen(!ctrlOpen)}
-                className="text-left p-4 text-xl "
-                style={{ zIndex: "9999" }}
-              >
-                {emoji}
-              </span>
-            </div>
           </div>
         </div>
       )}
-
-      <div
-        style={{ zIndex: "9999" }}
-        className={`absolute flex flex-col transition-opacity duration-500 inset-0 w-screen px-2 pointer-events-none
-${ctrlOpen ? "opacity-100" : "opacity-0"}
-`}
-      >
-        <div
-          onClick={() => setCtrlOpen(!ctrlOpen)}
-          className={`sticky pointer-events-auto h-14`}
-        />
-        <div
-          className={`overflow-hidden border flex-shrink flex flex-col rounded-xl bg-white bg-opacity-80 w-full pt-2 px-4
-${ctrlOpen ? "pointer-events-auto" : "pointer-events-none"}
-`}
-          style={{ borderColor: "#0000ff" }}
-        >
-          <div
-            onClick={() => setCtrlOpen(!ctrlOpen)}
-            className="flex flex-row mt-1 mb-4 justify-between"
-          >
-            <span className="font-mond underline text-xl">controls</span>
-            <span
-              style={{ color: "#0000ff" }}
-              className="p-1 text-right font-pixel"
-            >
-              X
-            </span>
-          </div>
-          <div className="flex flex-col space-y-2">
-            <div className="flex flex-row">
-              <input
-                className="mr-4 mt-1"
-                type="checkbox"
-                defaultChecked={freeze}
-                onChange={e => setFreeze(e.target.checked)}
-              />
-              <p
-                className={`block transition-opacity duration-500 font-mont ${
-                  freeze ? "opacity-100" : "opacity-30"
-                }`}
-              >
-                freeze
-              </p>
-            </div>
-            {ctrlValues.map((ctrl, index) => (
-              <Control
-                name={ctrl.name}
-                onChange={(value, active) =>
-                  updateOnCtrlChange(index, value, active)
-                }
-                min={ctrl.minVal}
-                max={ctrl.maxVal}
-                start={ctrl.value}
-                step={ctrl.step}
-                active={ctrl.active}
-                hasCheckbox={ctrl.hasCheckbox}
-              />
-            ))}
-          </div>
-
-          <input
-            className="inline-block border-none bg-transparent text-center mt-4 mb-2 shadow-none rounded-none text-5xl"
-            value={emoji}
-            onChange={evt => setEmoji(evt.target.value)}
-            maxLength={3}
-          />
-          <a
-            className="underline mb-2 font-mond"
-            style={{ color: "#0000ff" }}
-            href="https://github.com/isyuck/website/blob/master/src/pages/emojis.js"
-          >
-            view source
-          </a>
-        </div>
-        <div
-          onClick={() => setCtrlOpen(!ctrlOpen)}
-          className={`sticky pointer-events-auto flex-grow`}
-          style={{ zIndex: "99999" }}
-        />
-      </div>
     </>
   )
 }
 
-const Control = ({
+const ControlSingle = ({
   name,
   onChange,
   start,
@@ -306,62 +379,137 @@ const Control = ({
   }
 
   return (
-    <div className="grid grid-cols-2 w-full">
-      <div className="flex flex-row">
-        {hasCheckbox && (
-          <input
-            className="mr-4 mt-1"
-            type="checkbox"
-            defaultChecked={active}
-            onChange={handleChangeActive}
-          />
-        )}
-        <p
-          className={`block transition-opacity duration-500 font-mont ${
-            compActive ? "opacity-100" : "opacity-30"
-          }`}
+    <div className={`relative flex flex-row h-6 text-gray-800`}>
+      <div>
+        <div
+          className={`absolute inset-0 px-1 pt-0.5 z-20 pointer-events-none flex font-mono text-sm flex-row justify-between`}
         >
-          {name}
-          <span className="ml-2 font-mono text-sm">{`(${val.toFixed(
-            2
-          )})`}</span>
-        </p>
-      </div>
-      <div
-        className={`ml-1 w-full transition-opacity duration-500 ${
-          compActive
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-30 pointer-events-none"
-        }`}
-      >
-        <Slider
-          styles={{
-            track: {
-              backgroundColor: "#00000000",
-              width: "100%",
-              height: "8px",
-              border: "1px solid #888",
-            },
-            active: {
-              backgroundColor: "#ddd",
-            },
-            thumb: {
-              width: 15,
-              height: 15,
-              border: "1px solid #444",
-              boxShadow: "0",
-            },
-          }}
-          axis="x"
-          x={val}
-          xmin={min}
-          xmax={max}
-          xstep={step}
-          onChange={({ x }) => handleChangeSlider(x)}
-        />
+          <span>{name}</span>
+          <span className="text-gray-400">{`${val.toFixed(2)}`}</span>
+        </div>
+        <div className={`absolute inset-0 w-full z-10`}>
+          <Slider
+            styles={{
+              track: {
+                backgroundColor: "#00000000",
+                width: "100%",
+                height: 24,
+                boxSizing: "border-box",
+                border: "1px solid #d1d5db",
+                borderRadius: 0,
+              },
+              active: {
+                width: "100%",
+                backgroundColor: "#d1d5db",
+                height: 23,
+                borderRadius: 0,
+              },
+              thumb: {
+                width: 0,
+                height: 0,
+              },
+            }}
+            axis="x"
+            x={val}
+            xmin={min}
+            xmax={max}
+            xstep={step}
+            onChange={({ x }) => handleChangeSlider(x)}
+          />
+        </div>
       </div>
     </div>
   )
 }
 
+const ControlDouble = ({
+  name,
+  onChange,
+  start,
+  min,
+  max,
+  step,
+  active,
+  hasCheckbox,
+}) => {
+  const [val, setVal] = useState(start)
+  const [compActive, setCompActive] = useState(active)
+
+  const handleChangeActive = e => {
+    setCompActive(e)
+    onChange({ x: val.x, y: val.y }, e)
+  }
+
+  const handleChangeSlider = (x, y) => {
+    setVal({ x: x, y: y })
+    onChange({ x: x, y: y }, compActive)
+  }
+
+  return (
+    <div
+      className={`relative flex flex-col text-gray-800 transition-opacity duration-500 ${
+        compActive ? "" : "opacity-50"
+      }
+`}
+      style={{ height: "calc(50vw - 1.25rem)" }}
+    >
+      <div
+        className={`absolute inset-0 w-full z-20 flex pointer-events-none font-mono text-sm flex-row justify-between
+`}
+      >
+        <div
+          onClick={() => handleChangeActive(!compActive)}
+          className="absolute top-0 left-0 px-1 pt-0.5 pointer-events-auto"
+        >
+          <span>{name}</span>
+        </div>
+        <div className="absolute bottom-0 w-full flex justify-between px-1">
+          <span className="text-gray-400">{`X ${val.x.toFixed(2)}`}</span>
+          <span className="text-gray-400">{`Y ${val.y.toFixed(2)}`}</span>
+        </div>
+      </div>
+      <div className="absolute inset-0 w-full z-10">
+        <Slider
+          styles={{
+            track: {
+              backgroundColor: "#d1d5db",
+              height: "100%",
+              width: "calc(50vw - 1.5rem)",
+              boxSizing: "border-box",
+              border: "1px solid #d1d5db",
+              borderRadius: 0,
+            },
+            active: {
+              height: "calc(50vw - 1.25rem)",
+              width: "calc(50vw - 1.25rem)",
+              backgroundColor: "#d1d5db",
+              height: 23,
+              borderRadius: 0,
+            },
+            thumb: {
+              width: 16,
+              height: 16,
+              border: "0px solid #000",
+              borderStyle: "solid",
+              backgroundColor: "#f3f4f6",
+              boxShadow: "inset 0px 0px 0px 0px red",
+              borderRadius: 0,
+            },
+          }}
+          axis="xy"
+          x={val.x}
+          y={val.y}
+          xmin={min}
+          xmax={max}
+          ymin={min}
+          ymax={max}
+          xstep={step}
+          ystep={step}
+          disabled={!compActive}
+          onChange={({ x, y }) => handleChangeSlider(x, y)}
+        />
+      </div>
+    </div>
+  )
+}
 export default Emoji

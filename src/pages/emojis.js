@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect, PropTypes } from "react"
-import Header from "../components/header"
-import Slider from "react-input-slider"
+import React, { useRef, useState, useEffect, PropTypes } from "react";
+import Header from "../components/header";
+import Slider from "react-input-slider";
 
 const Emoji = ({ data, location }) => {
   const [ctrlValues, setCtrlValues] = useState([
@@ -74,56 +74,56 @@ const Emoji = ({ data, location }) => {
       active: false,
       hasCheckbox: true,
     },
-  ])
+  ]);
 
-  const [motionGranted, setMotionGranted] = useState(false)
-  const [gamma, setGamma] = useState(0)
+  const [motionGranted, setMotionGranted] = useState(false);
+  const [gamma, setGamma] = useState(0);
 
   // 'freeze' input from device rotation
-  const [freeze, setFreeze] = useState(false)
+  const [freeze, setFreeze] = useState(false);
 
   useEffect(() => {
     if (window.DeviceOrientationEvent) {
-      window.ondeviceorientation = e => handleOrientation(e)
+      window.ondeviceorientation = (e) => handleOrientation(e);
     }
-  })
+  });
 
-  const handleOrientation = e => {
+  const handleOrientation = (e) => {
     if (!freeze) {
-      setGamma(e.gamma)
+      setGamma(e.gamma);
     }
-  }
+  };
 
   const requestMotionAccess = () => {
     if (typeof DeviceOrientationEvent.requestPermission === "function") {
       DeviceOrientationEvent.requestPermission()
-        .then(permissionState => {
+        .then((permissionState) => {
           if (permissionState === "granted") {
-            window.addEventListener("deviceorientation", handleOrientation)
-            setMotionGranted(true)
+            window.addEventListener("deviceorientation", handleOrientation);
+            setMotionGranted(true);
           }
         })
-        .catch(console.error)
+        .catch(console.error);
     } else {
-      window.addEventListener("deviceorientation", handleOrientation)
+      window.addEventListener("deviceorientation", handleOrientation);
     }
-  }
+  };
 
   const newEmoji = () => {
-    setEmoji(emojis[Math.floor(Math.random() * emojis.length)].substring(0, 2))
-  }
+    setEmoji(emojis[Math.floor(Math.random() * emojis.length)].substring(0, 2));
+  };
 
-  const emojis = require("emoji.json/emoji-compact.json")
-  const [emoji, setEmoji] = useState(emojis[0])
+  const emojis = require("emoji.json/emoji-compact.json");
+  const [emoji, setEmoji] = useState(emojis[0]);
 
-  const [ctrlOpen, setCtrlOpen] = useState(false)
+  const [ctrlOpen, setCtrlOpen] = useState(false);
 
   const updateOnCtrlChange = (index, value, active) => {
-    let cv = [...ctrlValues]
-    cv[index].value = value
-    cv[index].active = active
-    setCtrlValues(cv)
-  }
+    let cv = [...ctrlValues];
+    cv[index].value = value;
+    cv[index].active = active;
+    setCtrlValues(cv);
+  };
 
   return (
     <>
@@ -232,7 +232,7 @@ ${ctrlOpen ? "pointer-events-auto" : "pointer-events-none"}
                 className="mr-4 mt-1"
                 type="checkbox"
                 defaultChecked={freeze}
-                onChange={e => setFreeze(e.target.checked)}
+                onChange={(e) => setFreeze(e.target.checked)}
               />
               <p
                 className={`block transition-opacity duration-500 font-mont ${
@@ -261,7 +261,7 @@ ${ctrlOpen ? "pointer-events-auto" : "pointer-events-none"}
           <input
             className="inline-block border-none bg-transparent text-center mt-4 mb-2 shadow-none rounded-none text-5xl"
             value={emoji}
-            onChange={evt => setEmoji(evt.target.value)}
+            onChange={(evt) => setEmoji(evt.target.value)}
             maxLength={3}
           />
           <a
@@ -279,8 +279,8 @@ ${ctrlOpen ? "pointer-events-auto" : "pointer-events-none"}
         />
       </div>
     </>
-  )
-}
+  );
+};
 
 const Control = ({
   name,
@@ -292,18 +292,18 @@ const Control = ({
   active,
   hasCheckbox,
 }) => {
-  const [val, setVal] = useState(start)
-  const [compActive, setCompActive] = useState(active)
+  const [val, setVal] = useState(start);
+  const [compActive, setCompActive] = useState(active);
 
-  const handleChangeActive = e => {
-    setCompActive(e.target.checked)
-    onChange(val, e.target.checked)
-  }
+  const handleChangeActive = (e) => {
+    setCompActive(e.target.checked);
+    onChange(val, e.target.checked);
+  };
 
-  const handleChangeSlider = e => {
-    setVal(e)
-    onChange(e, compActive)
-  }
+  const handleChangeSlider = (e) => {
+    setVal(e);
+    onChange(e, compActive);
+  };
 
   return (
     <div className="grid grid-cols-2 w-full">
@@ -361,7 +361,7 @@ const Control = ({
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Emoji
+export default Emoji;

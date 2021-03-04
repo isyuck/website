@@ -1,13 +1,12 @@
 import React from "react";
 import SliderX from "./slider-x.jsx";
 
-const Control = ({ ctrlValues, emoji, newEmoji, childRef }) => {
+const Control = ({ ctrlValues, emoji, setEmoji, newEmoji, childRef }) => {
   // map string values denoting what component to use to the actual component to use
   // this will be more useful if other types of components are added, e.g. xy slider
   const compKey = {
     SliderX: SliderX,
   };
-
   return (
     <div
       ref={childRef}
@@ -58,8 +57,8 @@ const Control = ({ ctrlValues, emoji, newEmoji, childRef }) => {
               className="px-1 bg-transparent h-6 rounded-none max-w-full w-16 text-right"
               name=""
               type="text"
-              onChange={(e) => (emoji = e.target.value)}
-              value={emoji}
+              onChange={(e) => setEmoji(e.target.value)}
+              defaultValue={emoji}
             />
           </div>
           <div

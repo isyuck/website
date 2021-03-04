@@ -327,6 +327,7 @@ const Emoji = ({ data, location }) => {
             childRef={ctrlRef}
             ctrlValues={ctrlValues}
             emoji={emoji}
+            setEmoji={setEmoji}
             newEmoji={newEmoji}
           />
         </div>

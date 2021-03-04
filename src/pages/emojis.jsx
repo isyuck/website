@@ -226,7 +226,7 @@ const Emoji = ({ data, location }) => {
 
   useEffect(() => {
     disableBodyScroll(ctrlRef.current);
-    enableBodyScroll(mainBodyRef.current);
+    disableBodyScroll(mainBodyRef.current);
   }, []);
 
   // why doesn't js have linear interpolation?
@@ -279,7 +279,6 @@ const Emoji = ({ data, location }) => {
         <meta charSet="utf-8" />
         <title>emojis | isaac.ac</title>
         <link rel="canonical" href="https://isaac.ac" />
-        />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"

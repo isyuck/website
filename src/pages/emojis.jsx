@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Control from "../components/emojis/control";
 import { Helmet } from "react-helmet";
-import {
-  disableBodyScroll,
-  enableBodyScroll,
-  clearAllBodyScrollLocks,
-} from "body-scroll-lock";
+import { disableBodyScroll } from "body-scroll-lock";
 
 const Emoji = ({ data, location }) => {
   const [ctrlValues, setCtrlValues] = useState([
@@ -236,15 +232,13 @@ const Emoji = ({ data, location }) => {
 
   const [motionGranted, setMotionGranted] = useState(false);
 
-  // phone rotation
-  const [gamma, setGamma] = useState(0);
-
   useEffect(() => {
     if (window.DeviceOrientationEvent) {
       window.ondeviceorientation = (e) => handleOrientation(e);
     }
   });
 
+  // called on button press
   const requestMotionAccess = () => {
     if (typeof DeviceOrientationEvent.requestPermission === "function") {
       DeviceOrientationEvent.requestPermission()
@@ -260,17 +254,23 @@ const Emoji = ({ data, location }) => {
     }
   };
 
+  // phone rotation
+  const [gamma, setGamma] = useState(0);
+
   const handleOrientation = (e) => {
     setGamma(e.gamma);
   };
 
+  // return a new, random emoji
   const newEmoji = () => {
     setEmoji(emojis[Math.floor(Math.random() * emojis.length)].substring(0, 2));
   };
 
+  // list of all emojis
   const emojis = require("emoji.json/emoji-compact.json");
   const [emoji, setEmoji] = useState(emojis[0]);
 
+  // state of the control panel at the bottom of the screen
   const [ctrlOpen, setCtrlOpen] = useState(false);
 
   return (
@@ -278,7 +278,7 @@ const Emoji = ({ data, location }) => {
       <Helmet>
         <meta charSet="utf-8" />
         <title>emojis | isaac.ac</title>
-        <link rel="canonical" href="https://isaac.ac" />
+        <link rel="canonical" href="https://isaac.ac/emojis" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"

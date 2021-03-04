@@ -35,8 +35,15 @@ const Control = ({ ctrlValues, emoji, newEmoji, childRef }) => {
             like high blur step & opacity values!
           </p>
           <p>
-            (while the page is being scrolled, the animation freezes. i'm not
-            really sure why...)
+            {"send any of your creations (or any bugs) to my "}
+            <a style={{ color: "#0000ff" }} href="mailto:isaac@isaac.ac">
+              email
+            </a>
+            {", or as a message on "}
+            <a style={{ color: "#0000ff" }} href="https://instagram.com/isyuck">
+              instagram
+            </a>
+            {"!"}
           </p>
         </Tile>
         <Tile>

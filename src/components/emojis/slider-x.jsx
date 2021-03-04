@@ -1,52 +1,41 @@
 import React from "react";
-import Slider from "react-input-slider";
 
-const SliderX = ({ ctrl, colors }) => {
+const SliderX = ({ ctrl }) => {
   return (
     <>
       {ctrl && (
-        <div className={`relative flex flex-row h-6`}>
-          <div>
-            <div
-              className={`absolute inset-0 px-1 pt-0.5 z-20 pointer-events-none flex flex-row font-mono text-sm justify-between`}
+        <>
+          <div className="flex flex-row justify-between">
+            <span
+              onClick={() => (ctrl.value = ctrl.defaultVal)}
+              className="min-w-max max-h-6 pl-1 text-base font-mont"
+              style={{ color: "#0000ff" }}
             >
-              <span style={{ color: colors.primary }}>{ctrl.name}</span>
-              <span style={{ color: colors.secondary }}>{`${ctrl.value.toFixed(
-                2
-              )}`}</span>
-            </div>
-            <div className={`absolute inset-0 w-full z-10 pointer-events-auto`}>
-              <Slider
-                styles={{
-                  track: {
-                    backgroundColor: "#00000000",
-                    width: "100%",
-                    height: 24,
-                    boxSizing: "border-box",
-                    border: `1px solid ${colors.background}`,
-                    borderRadius: 0,
-                  },
-                  active: {
-                    width: "100%",
-                    backgroundColor: colors.background,
-                    height: 23,
-                    borderRadius: 0,
-                  },
-                  thumb: {
-                    width: 0,
-                    height: 0,
-                  },
-                }}
-                axis="x"
-                xstep={ctrl.step}
-                xmin={ctrl.minVal}
-                xmax={ctrl.maxVal}
-                x={ctrl.value}
-                onChange={({ x }) => (ctrl.value = x)}
-              />
-            </div>
+              {ctrl.name}
+            </span>
+            <input
+              className="px-1 bg-transparent rounded-none max-w-full w-16 text-right"
+              name=""
+              type="tel"
+              pattern="[0-9]*"
+              onChange={(e) => (ctrl.value = e.target.value)}
+              min={ctrl.minVal}
+              max={ctrl.maxVal}
+              value={ctrl.value}
+            />
           </div>
-        </div>
+          <div className={`w-full z-20 px-1 pt-1`}>
+            <input
+              className="w-full"
+              value={ctrl.value}
+              type="range"
+              min={ctrl.minVal}
+              max={ctrl.maxVal}
+              step={ctrl.step}
+              onChange={(e) => (ctrl.value = e.target.value)}
+            />
+          </div>
+        </>
       )}
     </>
   );

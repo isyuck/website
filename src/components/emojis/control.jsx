@@ -59,6 +59,7 @@ const Control = ({ ctrlValues, emoji, setEmoji, newEmoji, childRef }) => {
               type="text"
               onChange={(e) => setEmoji(e.target.value)}
               defaultValue={emoji}
+              value={emoji}
             />
           </div>
           <div

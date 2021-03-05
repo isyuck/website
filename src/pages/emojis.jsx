@@ -28,8 +28,8 @@ const Emoji = ({ data, location }) => {
     {
       id: 2,
       name: "gamma/spin",
-      value: 0.7,
-      defaultVal: 0.7,
+      value: 0.3,
+      defaultVal: 0.3,
       minVal: 0,
       maxVal: 1,
       step: 0.01,
@@ -117,7 +117,7 @@ const Emoji = ({ data, location }) => {
     },
     {
       id: 11,
-      name: "contrast step",
+      name: "contrast",
       defaultVal: 100,
       value: 100,
       minVal: 0,
@@ -228,6 +228,14 @@ const Emoji = ({ data, location }) => {
   // why doesn't js have linear interpolation?
   const lerp = (v0, v1, t) => {
     return v0 * (1 - t) + v1 * t;
+  };
+
+  // some safety for parseInt
+  const parse = (x) => {
+    if (isNaN(x) || x == 0 || x == null) {
+      return 1;
+    }
+    return parseInt(x);
   };
 
   const [motionGranted, setMotionGranted] = useState(false);
@@ -343,10 +351,11 @@ const Emoji = ({ data, location }) => {
             }}
           >
             <div style={{}} className="flex relative h-screen w-screen">
-              {[...Array(parseInt(ctrlValues[0].value))].map((x, i) => (
+              {[...Array(parse(ctrlValues[0].value, 10))].map((x, i) => (
                 <button
                   className={`absolute my-auto z-0 h-full w-full overflow-hidden`}
                   style={{
+                    imageRendering: "crisp-edges",
                     willChange: "transform",
                     filter: `saturate(${ctrlValues[5].value}%)
                          blur(${i * ctrlValues[6].value}px)
@@ -359,8 +368,8 @@ const Emoji = ({ data, location }) => {
                     transform: `
 rotateY(${
                       lerp(
-                        (Date.now() * 0.05 + i) * ctrlValues[3].value,
                         gamma + i,
+                        (Date.now() * 0.05 + i) * ctrlValues[3].value,
                         ctrlValues[2].value
                       ) * ctrlValues[4].value
                     }deg)
@@ -371,7 +380,7 @@ ${
       }deg)`
     : ""
 }
-translate3d(${ctrlValues[18].value}px, ${i * ctrlValues[19].value}px, ${
+translate3d(${ctrlValues[18].value}px, ${i * ctrlValues[19].value - 30}px, ${
                       i * ctrlValues[20].value
                     }px)
 ${

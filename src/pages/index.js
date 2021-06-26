@@ -21,22 +21,33 @@ const Index = ({ data, location }) => {
       <div className="p-2 text-xl">
         <span>
           i am an artist working with code. i am currently interested in
-          human-computer interaction, emergent behaviours, networking, memes,
-          digitisation, functional programming, etc. this already feels too
-          formal. i live in plymouth. i am younger than the internet. if it was
-          called writing and not blogging, maybe i would do it...
+          human-computer interaction, emergent behaviours, memes, digitisation,
+          nostalgia. this already feels too formal. i live in plymouth. i am
+          younger than the internet. if it was called writing and not blogging,
+          maybe i would do it...
         </span>
         {/* <div className="pt-4"> */}
         {/*   <Sec name="text" /> */}
         {/* </div> */}
         <div className="flex flex-col gap-y-1 pt-4">
-          <Sec name="emojis" href="/emojis" info="2021, web, iOS only" />
+          <Sec
+            name="tidal-party"
+            href="https://github.com/isyuck/tidal-party"
+            info="ongoing, with justin kuhn"
+            local={false}
+          />
+          <Sec
+            name="emojis"
+            href="/emojis"
+            info="2021, web, interactive, iOS only"
+          />
           <Sec
             name="live @ solstice"
             href="https://youtu.be/acd2XJ0UTDA"
-            info="2021, music, live coding"
+            info="2021, music, visual, live coding"
             local={false}
           />
+          <span>more to upload...</span>
         </div>
       </div>
     </>

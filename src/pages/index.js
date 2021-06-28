@@ -25,18 +25,7 @@ const Index = ({ data, location }) => {
           nostalgia. this already feels too formal. i live in plymouth. i am
           younger than the internet.
         </span>
-
-        {/* <div className="pt-4"> */}
-        {/*   <Sec name="text" /> */}
-        {/* </div> */}
         <div className="flex flex-col gap-y-1 pt-4">
-          <a
-            style={{ color: "#0000ff" }}
-            className="underline"
-            href="mailto:isaac@isaac.ac"
-          >
-            isaac@isaac.ac
-          </a>
           <Sec
             name="tidal-party"
             href="https://github.com/isyuck/tidal-party"

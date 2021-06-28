@@ -23,13 +23,20 @@ const Index = ({ data, location }) => {
           i am an artist working with code. i am currently interested in
           human-computer interaction, emergent behaviours, memes, digitisation,
           nostalgia. this already feels too formal. i live in plymouth. i am
-          younger than the internet. if it was called writing and not blogging,
-          maybe i would do it...
+          younger than the internet.
         </span>
+
         {/* <div className="pt-4"> */}
         {/*   <Sec name="text" /> */}
         {/* </div> */}
         <div className="flex flex-col gap-y-1 pt-4">
+          <a
+            style={{ color: "#0000ff" }}
+            className="underline"
+            href="mailto:isaac@isaac.ac"
+          >
+            isaac@isaac.ac
+          </a>
           <Sec
             name="tidal-party"
             href="https://github.com/isyuck/tidal-party"
@@ -44,7 +51,7 @@ const Index = ({ data, location }) => {
           <Sec
             name="live @ solstice"
             href="https://youtu.be/acd2XJ0UTDA"
-            info="2021, music, visual, live coding"
+            info="2020, music, visual, live coding"
             local={false}
           />
           <span>more to upload...</span>
